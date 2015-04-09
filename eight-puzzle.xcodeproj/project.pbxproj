@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		23C90B671AD62CC7008A00F1 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23C90B661AD62CC7008A00F1 /* main.cpp */; };
+		23C90B6F1AD62D94008A00F1 /* board_obj.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23C90B6D1AD62D94008A00F1 /* board_obj.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +26,8 @@
 /* Begin PBXFileReference section */
 		23C90B631AD62CC7008A00F1 /* eight-puzzle */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "eight-puzzle"; sourceTree = BUILT_PRODUCTS_DIR; };
 		23C90B661AD62CC7008A00F1 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		23C90B6D1AD62D94008A00F1 /* board_obj.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = board_obj.cpp; sourceTree = "<group>"; };
+		23C90B6E1AD62D94008A00F1 /* board_obj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = board_obj.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +61,8 @@
 			isa = PBXGroup;
 			children = (
 				23C90B661AD62CC7008A00F1 /* main.cpp */,
+				23C90B6D1AD62D94008A00F1 /* board_obj.cpp */,
+				23C90B6E1AD62D94008A00F1 /* board_obj.h */,
 			);
 			path = "eight-puzzle";
 			sourceTree = "<group>";
@@ -118,6 +123,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23C90B6F1AD62D94008A00F1 /* board_obj.cpp in Sources */,
 				23C90B671AD62CC7008A00F1 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -202,6 +208,8 @@
 		23C90B6B1AD62CC7008A00F1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
+				GCC_SHORT_ENUMS = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -209,6 +217,8 @@
 		23C90B6C1AD62CC7008A00F1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
+				GCC_SHORT_ENUMS = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
