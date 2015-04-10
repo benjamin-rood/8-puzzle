@@ -51,7 +51,8 @@ public:
     auto* begin() const {   return &boardState[0];      }
     auto* end() const   {   return &boardState[9];      }   //  implementation spec calls for max array length +1 position.
     
-    std::vector<Board> spawnBoardMoves ( void );
+    std::vector<Board> spawnBoardMoves ( void );    //  spawns a vector of new Boards based on possible moves from current boardState. Equivalent to STATE EXPANSION! :-)
+    
     void recordMove ( enum tileMove m );
     void recordMove ( const Board& b, enum tileMove m );
     
