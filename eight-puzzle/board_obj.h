@@ -31,9 +31,10 @@ private:
     std::vector<enum tileMove> moveHistory;                                        //  stores a record of tile moves (e.g. U,U,D,L,R,D etc)
     
     int lastMove ( void ) const;
-    auto moveReverse ( const enum tileMove& move );
-    auto okMove ( const enum tileMove& move );
+    int moveReverse ( const enum tileMove& move ) const;
     Board( const Board& B, enum tileMove move );   //  INTERNAL copy constructor - copies board then applies move.
+    bool okMove ( const enum tileMove& move ) const;
+    
     
 public:
     explicit Board ( void );     //  default constructor will initialise a randomised boardState array.
@@ -54,8 +55,7 @@ public:
     
     std::ostream& toStream( std::ostream& os ) const ;
     
-    std::vector<Board> spawnBoardMoves ( void );    //  spawns a vector of new Boards based on possible moves from current boardState. Equivalent to STATE EXPANSION! :-)
-    
+    friend std::vector<Board> spawnBoardMovesFrom ( const Board& B );    //  spawns a vector of new Boards based on possible moves from current boardState. Equivalent to STATE EXPANSION! :-)
     friend void printBoard ( const Board& B );
     friend void printLastMove ( const Board& B );
     friend std::string getMoveHistoryString ( const Board& B );

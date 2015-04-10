@@ -76,9 +76,6 @@ Board::Board( const Board& b, enum tileMove move )  //  INTERNAL PRIVATE copy co
     
 }
 
-//Board::Board( Board&& m ) : Board() {
-//    std::swap( *this, m );
-//}
 
 Board::~Board() //  faster not to be inline.
 {}
@@ -134,11 +131,11 @@ int Board::lastMove( void ) const  {
     return moveHistory[moveHistory.size()-1];
 }
 
-auto Board::moveReverse( const enum tileMove& move )  {
+int Board::moveReverse( const enum tileMove& move ) const  {
     return ((move+2) % 4);
 }
 
-auto Board::okMove ( const enum tileMove& move )  {
+bool Board::okMove ( const enum tileMove& move )  const {
     //  returning ( lastMove != ((move+2) mod 4 ))
     //  i.e. the reverse of any move up, left, down, right with values from 0-3,
     //  is (move+2)%4, and we compare this with the last move done
@@ -146,92 +143,6 @@ auto Board::okMove ( const enum tileMove& move )  {
     if ( moveHistory.empty() )
         return true;
     return ( lastMove() != moveReverse(move) );
-}
-
-
-std::vector<Board> Board::spawnBoardMoves ( void )    {
-    std::vector<Board> BoardMoves;
-    
-    switch ( emptyTile ) {
-        case topLeft:
-            if ( okMove( down ) )
-                BoardMoves.push_back( Board( *this, down ) );
-            if ( okMove( right ) )
-                BoardMoves.push_back( Board( *this, right ) );
-            break;
-            
-        case topMid:
-            if ( okMove( left ) )
-                BoardMoves.push_back( Board( *this, left ) );
-            if ( okMove( down ) )
-                BoardMoves.push_back( Board( *this, down ) );
-            if ( okMove( right ) )
-                BoardMoves.push_back( Board( *this, right ) );
-            break;
-            
-        case topRight:
-            if ( okMove( left ) )
-                BoardMoves.push_back( Board( *this, left ) );
-            if ( okMove( down ) )
-                BoardMoves.push_back( Board( *this, down ) );
-            break;
-            
-        case centerLeft:
-            if ( okMove( up ) )
-                BoardMoves.push_back( Board( *this, up ) );
-            if ( okMove( down ) )
-                BoardMoves.push_back( Board( *this, down ) );
-            if ( okMove( right ) )
-                BoardMoves.push_back( Board( *this, right ) );
-            break;
-            
-        case centerMid:
-            if ( okMove( up ) )
-                BoardMoves.push_back( Board( *this, up ) );
-            if ( okMove( left ) )
-                BoardMoves.push_back( Board( *this, left ) );
-            if ( okMove( down ) )
-                BoardMoves.push_back( Board( *this, down ) );
-            if ( okMove( right ) )
-                BoardMoves.push_back( Board( *this, right ) );
-            break;
-            
-        case centerRight:
-            if ( okMove( up ) )
-                BoardMoves.push_back( Board( *this, up ) );
-            if ( okMove( left ) )
-                BoardMoves.push_back( Board( *this, left ) );
-            if ( okMove( down ) )
-                BoardMoves.push_back( Board( *this, down ) );
-            break;
-            
-        case botLeft:
-            if ( okMove( up ) )
-                BoardMoves.push_back( Board( *this, up ) );
-            if ( okMove( right ) )
-                BoardMoves.push_back( Board( *this, right ) );
-            break;
-            
-        case botMid:
-            if ( okMove( up ) )
-                BoardMoves.push_back( Board( *this, up ) );
-            if ( okMove( left ) )
-                BoardMoves.push_back( Board( *this, left ) );
-            if ( okMove( right ) )
-                BoardMoves.push_back( Board( *this, right ) );
-            break;
-            
-        case botRight:
-            if ( okMove( up ) )
-                BoardMoves.push_back( Board( *this, up ) );
-            if ( okMove( left ) )
-                BoardMoves.push_back( Board( *this, left ) );
-            break;
-        default:
-            break;
-    }
-    
-    return BoardMoves;
 }
 
 
@@ -263,6 +174,93 @@ std::ostream& operator<< ( std::ostream& os, const Board& B ) {
 
 
 //  BEGING BOARD-FRIENDLY FUNCTIONS
+
+
+std::vector<Board> spawnBoardMovesFrom ( const Board& B )    {
+    std::vector<Board> BoardMoves;
+    
+    switch ( B.emptyTile ) {
+        case topLeft:
+            if ( B.okMove( down ) )
+                BoardMoves.push_back( Board( B, down ) );
+            if ( B.okMove( right ) )
+                BoardMoves.push_back( Board( B, right ) );
+            break;
+            
+        case topMid:
+            if ( B.okMove( left ) )
+                BoardMoves.push_back( Board( B, left ) );
+            if ( B.okMove( down ) )
+                BoardMoves.push_back( Board( B, down ) );
+            if ( B.okMove( right ) )
+                BoardMoves.push_back( Board( B, right ) );
+            break;
+            
+        case topRight:
+            if ( B.okMove( left ) )
+                BoardMoves.push_back( Board( B, left ) );
+            if ( B.okMove( down ) )
+                BoardMoves.push_back( Board( B, down ) );
+            break;
+            
+        case centerLeft:
+            if ( B.okMove( up ) )
+                BoardMoves.push_back( Board( B, up ) );
+            if ( B.okMove( down ) )
+                BoardMoves.push_back( Board( B, down ) );
+            if ( B.okMove( right ) )
+                BoardMoves.push_back( Board( B, right ) );
+            break;
+            
+        case centerMid:
+            if ( B.okMove( up ) )
+                BoardMoves.push_back( Board( B, up ) );
+            if ( B.okMove( left ) )
+                BoardMoves.push_back( Board( B, left ) );
+            if ( B.okMove( down ) )
+                BoardMoves.push_back( Board( B, down ) );
+            if ( B.okMove( right ) )
+                BoardMoves.push_back( Board( B, right ) );
+            break;
+            
+        case centerRight:
+            if ( B.okMove( up ) )
+                BoardMoves.push_back( Board( B, up ) );
+            if ( B.okMove( left ) )
+                BoardMoves.push_back( Board( B, left ) );
+            if ( B.okMove( down ) )
+                BoardMoves.push_back( Board( B, down ) );
+            break;
+            
+        case botLeft:
+            if ( B.okMove( up ) )
+                BoardMoves.push_back( Board( B, up ) );
+            if ( B.okMove( right ) )
+                BoardMoves.push_back( Board( B, right ) );
+            break;
+            
+        case botMid:
+            if ( B.okMove( up ) )
+                BoardMoves.push_back( Board( B, up ) );
+            if ( B.okMove( left ) )
+                BoardMoves.push_back( Board( B, left ) );
+            if ( B.okMove( right ) )
+                BoardMoves.push_back( Board( B, right ) );
+            break;
+            
+        case botRight:
+            if ( B.okMove( up ) )
+                BoardMoves.push_back( Board( B, up ) );
+            if ( B.okMove( left ) )
+                BoardMoves.push_back( Board( B, left ) );
+            break;
+        default:
+            break;
+    }
+    
+    return BoardMoves;
+}
+
 
 void printBoard ( const Board& B )  {
     for ( int i = 0; i < B.boardState.size(); ++i ) {

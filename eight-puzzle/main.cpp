@@ -13,7 +13,7 @@ int main(int argc, const char * argv[]) {
     printBoard( begin );
     std::cout << std::endl;
     
-    std::vector<Board> firstMoves = begin.spawnBoardMoves();
+    std::vector<Board> firstMoves = spawnBoardMovesFrom( begin );
     for (auto b : firstMoves)   {
         printLastMove( b );
         std::cout << std::endl;
