@@ -17,14 +17,14 @@ Board::Board()  {   //  default constructor will initialise a randomised boardSt
         }
 }
 
-Board::Board( const Board& b ) : emptyTile{ b.emptyTile },
+Board::Board( const Board& b ) : emptyTile{ b.emptyTile },  //  straight copy constructor
     pathlength{ b.pathlength }, moveHistory{ b.moveHistory }  {
         
     std::copy( std::begin( b ), std::end( b ), std::begin( boardState ) );
 }
 
 
-Board::Board( const Board& b, enum tileMove move )
+Board::Board( const Board& b, enum tileMove move )  //  copy constructor - copies board then applies move.
     : emptyTile{ b.emptyTile }, pathlength{ b.pathlength },
     moveHistory{ b.moveHistory }  {
         
@@ -52,6 +52,7 @@ Board::Board( const Board& b, enum tileMove move )
     }
     
     moveHistory.push_back( move );
+    ++pathlength;
     
 }
 

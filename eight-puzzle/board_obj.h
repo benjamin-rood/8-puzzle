@@ -33,8 +33,8 @@ private:
     
 public:
     explicit Board( void );     //  default constructor will initialise a randomised boardState array.
-    Board( const Board& b );    //  copy constructor
-    Board( const Board& b, enum tileMove move );   //  copy construct - copies board then applies move.
+    Board( const Board& b );    //  straight copy constructor
+    Board( const Board& b, enum tileMove move );   //  copy constructor - copies board then applies move.
     Board( Board&& b );         //  move constructor
     ~Board( void );             //  no need for anything but the (system-provided) shallow destructor.
     
@@ -47,7 +47,7 @@ public:
     uint32_t& operator[] ( const int index );               //  boardState index position assignment
     
     
-    //  const uint32_t* iterators for range functions used as [begin, end)
+    //  iterators for range functions used as [begin, end)
     auto* begin() const {   return &boardState[0];      }
     auto* end() const   {   return &boardState[9];      }   //  implementation spec calls for max array length +1 position.
     
@@ -57,7 +57,7 @@ public:
     void recordMove ( const Board& b, enum tileMove m );
     
     void setState ( const std::array<uint32_t, 9> array );
-    //const std::array<uint32_t, 9>& getState ( void );
+
     auto& getState ( void );
     
     bool testForGoalState ( void );
