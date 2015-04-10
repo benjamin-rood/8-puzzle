@@ -9,5 +9,15 @@
 #include "board_obj.h"
 
 int main(int argc, const char * argv[]) {
+    Board begin;
+    begin.printBoard();
+    std::cout << std::endl;
     
+    std::vector<Board> firstMoves = begin.spawnBoardMoves();
+    for (auto b : firstMoves)   {
+        b.printLastMove();
+        std::cout << std::endl;
+        b.printBoard();
+        std::cout << std::endl;
+    }
 }

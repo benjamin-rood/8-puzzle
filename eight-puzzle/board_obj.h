@@ -35,7 +35,7 @@ public:
     explicit Board( void );     //  default constructor will initialise a randomised boardState array.
     Board( const Board& b );    //  straight copy constructor
     Board( const Board& b, enum tileMove move );   //  copy constructor - copies board then applies move.
-    Board( Board&& b );         //  move constructor
+//    Board( Board&& m );         //  move constructor
     ~Board( void );             //  no need for anything but the (system-provided) shallow destructor.
     
     //  iterators for range functions used as [begin, end)
@@ -74,6 +74,7 @@ public:
     auto okMove ( const enum tileMove& move );
     
     void printBoard ( void );
+    void printLastMove ( void );
     
     std::ostream& toStream( std::ostream& os ) const ;
     

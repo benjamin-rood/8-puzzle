@@ -72,9 +72,9 @@ Board::Board( const Board& b, enum tileMove move )  //  copy constructor - copie
     
 }
 
-Board::Board( Board&& m ) : Board() {
-    std::swap( *this, m );
-}
+//Board::Board( Board&& m ) : Board() {
+//    std::swap( *this, m );
+//}
 
 Board::~Board() //  faster not to be inline.
 {}
@@ -138,7 +138,7 @@ auto Board::moveReverse( const enum tileMove& move )  {
 
 auto Board::okMove ( const enum tileMove& move )  {
     //  returning ( lastMove != ((move+2) mod 4 ))
-    //  i.e. the reverse of any move U,L,D,R with values from 0-3,
+    //  i.e. the reverse of any move up, left, down, right with values from 0-3,
     //  is (move+2)%4, and we compare this with the last move done
     //  to stop backtracking/obvious local loops.
     return ( lastMove() != moveReverse(move) );
@@ -174,16 +174,16 @@ std::vector<Board> Board::spawnBoardMoves ( void )    {
             
         case centerLeft:
             if ( okMove( up ) )
-                BoardMoves.push_back( Board( *this, down ) );
+                BoardMoves.push_back( Board( *this, up ) );
             if ( okMove( down ) )
                 BoardMoves.push_back( Board( *this, down ) );
             if ( okMove( right ) )
                 BoardMoves.push_back( Board( *this, right ) );
             break;
-        
+            
         case centerMid:
             if ( okMove( up ) )
-                BoardMoves.push_back( Board( *this, down ) );
+                BoardMoves.push_back( Board( *this, up ) );
             if ( okMove( left ) )
                 BoardMoves.push_back( Board( *this, left ) );
             if ( okMove( down ) )
@@ -191,35 +191,35 @@ std::vector<Board> Board::spawnBoardMoves ( void )    {
             if ( okMove( right ) )
                 BoardMoves.push_back( Board( *this, right ) );
             break;
-        
+            
         case centerRight:
             if ( okMove( up ) )
-                BoardMoves.push_back( Board( *this, down ) );
+                BoardMoves.push_back( Board( *this, up ) );
             if ( okMove( left ) )
                 BoardMoves.push_back( Board( *this, left ) );
             if ( okMove( down ) )
                 BoardMoves.push_back( Board( *this, down ) );
             break;
-        
+            
         case botLeft:
             if ( okMove( up ) )
-                BoardMoves.push_back( Board( *this, down ) );
+                BoardMoves.push_back( Board( *this, up ) );
             if ( okMove( right ) )
                 BoardMoves.push_back( Board( *this, right ) );
             break;
-        
+            
         case botMid:
             if ( okMove( up ) )
-                BoardMoves.push_back( Board( *this, down ) );
+                BoardMoves.push_back( Board( *this, up ) );
             if ( okMove( left ) )
                 BoardMoves.push_back( Board( *this, left ) );
             if ( okMove( right ) )
                 BoardMoves.push_back( Board( *this, right ) );
             break;
-        
+            
         case botRight:
             if ( okMove( up ) )
-                BoardMoves.push_back( Board( *this, down ) );
+                BoardMoves.push_back( Board( *this, up ) );
             if ( okMove( left ) )
                 BoardMoves.push_back( Board( *this, left ) );
             break;
@@ -275,13 +275,37 @@ const std::vector<enum tileMove>& Board::getMoveHistory()  {
 }
 
 
-void Board::printBoard( void )  {
+void Board::printBoard ( void )  {
     for ( int i = 0; i < boardState.size(); ++i ) {
         if (i == 3 || i == 6)
             std::cout << std::endl;
         std::cout << boardState[i] << " ";
     }
     std::cout << std::endl;
+}
+
+
+void Board::printLastMove ( void )  {
+    switch (moveHistory[moveHistory.size()-1]) {
+        case up:
+            std::cout << "up";
+            break;
+            
+        case left:
+            std::cout << "left";
+            break;
+            
+        case down:
+            std::cout << "down";
+            break;
+        
+        case right:
+            std::cout << "right";
+            break;
+            
+        default:
+            break;
+    }
 }
 
 
