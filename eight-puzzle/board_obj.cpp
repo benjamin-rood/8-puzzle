@@ -9,6 +9,10 @@
 #include "board_obj.h"
 
 
+
+//  BEGIN INTERNAL CLASS METHODS
+
+
 //  iterators for range functions used as [begin, end)
 auto* Board::begin ( void ) const {
     return &boardState[0];
@@ -40,7 +44,7 @@ Board::Board( const Board& b ) : emptyTile{ b.emptyTile },  //  straight copy co
 }
 
 
-Board::Board( const Board& b, enum tileMove move )  //  copy constructor - copies board then applies move.
+Board::Board( const Board& b, enum tileMove move )  //  INTERNAL PRIVATE copy constructor - copies board then applies move.
     : emptyTile{ b.emptyTile }, pathlength{ b.pathlength },
     moveHistory{ b.moveHistory }  {
         
@@ -126,9 +130,7 @@ uint32_t& Board::operator[] ( const int index )   {
 }
 
 
-auto Board::lastMove( void )    {
-    if ( moveHistory.empty() )
-        return (enum tileMove)emptyTile;
+int Board::lastMove( void ) const  {
     return moveHistory[moveHistory.size()-1];
 }
 
@@ -233,84 +235,6 @@ std::vector<Board> Board::spawnBoardMoves ( void )    {
 }
 
 
-void Board::recordMove ( enum tileMove m )    {
-    moveHistory.push_back( m );
-}
-
-void Board::recordMove ( const Board& b, enum tileMove m )    {
-    std::copy( std::begin( b ), std::end( b ), std::begin( boardState ) );
-    emptyTile = b.emptyTile;
-    pathlength = b.pathlength;
-    moveHistory.push_back( m );
-}
-
-
-void Board::setState ( const std::array<uint32_t, 9> array )   {
-    std::copy( &array[0], &array[array.size()], std::begin( boardState ) );
-}
-
-auto& Board::getState ()    {
-    return boardState;
-}
-
-bool Board::testForGoalState ( void )   {
-    std::array<uint32_t, 9> goalState = {{ 0,1,2,3,4,5,6,7,8 }};
-    if ( std::equal( std::begin( boardState ), std::end( boardState ), std::begin( goalState ) ) )
-        return true;
-    return false;
-}
-
-void Board::setPathLength ( const uint32_t& pl ) {
-    pathlength = pl;
-}
-
-const uint32_t& Board::getPathLength () {
-    return pathlength;
-}
-
-void Board::setMoveHistory ( const std::vector<enum tileMove>& mh )    {
-    moveHistory = mh;
-}
-
-const std::vector<enum tileMove>& Board::getMoveHistory()  {
-    return moveHistory;
-}
-
-
-void Board::printBoard ( void )  {
-    for ( int i = 0; i < boardState.size(); ++i ) {
-        if (i == 3 || i == 6)
-            std::cout << std::endl;
-        std::cout << boardState[i] << " ";
-    }
-    std::cout << std::endl;
-}
-
-
-void Board::printLastMove ( void )  {
-    switch (moveHistory[moveHistory.size()-1]) {
-        case up:
-            std::cout << "up";
-            break;
-            
-        case left:
-            std::cout << "left";
-            break;
-            
-        case down:
-            std::cout << "down";
-            break;
-        
-        case right:
-            std::cout << "right";
-            break;
-            
-        default:
-            break;
-    }
-}
-
-
 std::ostream& Board::toStream( std::ostream& os ) const {
     os << "{ ";
     for (auto& x : boardState)
@@ -320,9 +244,142 @@ std::ostream& Board::toStream( std::ostream& os ) const {
 }
 
 
+//  END INTERNAL CLASS METHODS
+
+
+
+
+//  BEGIN EXTERNAL BOARD FUNCTIONS
+
+
 std::ostream& operator<< ( std::ostream& os, const Board& B ) {
     B.toStream( os );
     return os;
 }
 
 
+//  END EXTERNAL BOARD FUNCTIONS
+
+
+
+//  BEGING BOARD-FRIENDLY FUNCTIONS
+
+void printBoard ( const Board& B )  {
+    for ( int i = 0; i < B.boardState.size(); ++i ) {
+        if (i == 3 || i == 6)
+            std::cout << std::endl;
+        std::cout << B.boardState[i] << " ";
+    }
+    std::cout << std::endl;
+}
+
+
+void printLastMove ( const Board& B )  {
+    switch ( B.lastMove() ) {
+        case up:
+            std::cout << "U";
+            break;
+            
+        case left:
+            std::cout << "L";
+            break;
+            
+        case down:
+            std::cout << "D";
+            break;
+            
+        case right:
+            std::cout << "R";
+            break;
+            
+        default:
+            break;
+    }
+}
+
+
+std::string getMoveHistoryString ( const Board& B ) {
+    std::string mhs;
+    for ( auto&m : B.moveHistory )  {
+        switch ( m ) {
+            case up:
+                mhs += "U";
+                break;
+                
+            case left:
+                mhs += "L";
+                break;
+                
+            case down:
+                mhs += "D";
+                break;
+                
+            case right:
+                mhs += "R";
+                break;
+                
+            default:
+                break;
+        }
+    }
+    return mhs;
+}
+
+
+const std::vector<enum tileMove>& getMoveHistory ( const Board& B ) {
+    return B.moveHistory;
+}
+
+
+Board recordMove ( const Board& B, enum tileMove move )    {
+    
+    Board newBoard( B );
+    std::copy( std::begin( B ), std::end( B ), std::begin( newBoard.boardState ) );
+    newBoard.emptyTile = B.emptyTile;
+    newBoard.pathlength = B.pathlength;
+    
+    switch ( move ) {
+        case up:
+            std::swap(newBoard.boardState[newBoard.emptyTile], newBoard.boardState[newBoard.emptyTile-3]);
+            newBoard.emptyTile -= 3;
+            break;
+        case left:
+            std::swap(newBoard.boardState[newBoard.emptyTile], newBoard.boardState[newBoard.emptyTile-1]);
+            newBoard.emptyTile -= 1;
+            break;
+        case down:
+            std::swap(newBoard.boardState[newBoard.emptyTile], newBoard.boardState[newBoard.emptyTile+3]);
+            newBoard.emptyTile += 3;
+            break;
+        case right:
+            std::swap(newBoard.boardState[newBoard.emptyTile], newBoard.boardState[newBoard.emptyTile+1]);
+            newBoard.emptyTile += 1;
+            break;
+        default:
+            break;
+    }
+    
+    newBoard.moveHistory.push_back( move );
+    ++newBoard.pathlength;
+    
+    return newBoard;
+}
+
+
+const std::array<uint32_t, 9>& getState ( const Board& B )    {
+    return B.boardState;
+}
+
+bool testForGoalState ( const Board& B )   {
+    std::array<uint32_t, 9> goalState = {{ 0,1,2,3,4,5,6,7,8 }};
+    if ( std::equal( std::begin( B.boardState ), std::end( B.boardState ), std::begin( goalState ) ) )
+        return true;
+    return false;
+}
+
+const uint32_t& getPathLength ( const Board& B ) {
+    return B.pathlength;
+}
+
+
+//  END BOARD-FRIENDLY FUNCTIONS
