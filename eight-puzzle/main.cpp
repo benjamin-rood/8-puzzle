@@ -10,14 +10,14 @@
 
 int main(int argc, const char * argv[]) {
     Board begin;
-    begin.printBoard();
+    printBoard( begin );
     std::cout << std::endl;
     
     std::vector<Board> firstMoves = begin.spawnBoardMoves();
     for (auto b : firstMoves)   {
-        b.printLastMove();
+        printLastMove( b );
         std::cout << std::endl;
-        b.printBoard();
+        printBoard( b );
         std::cout << std::endl;
     }
 }
