@@ -6,7 +6,6 @@ Woo-Hoo! Here is Dave & Ben's 159.302 Assignment One: The Mystery of The Eight P
 
 * Implementing search algorithms to get a computer program to solve the mystery of the eight puzzle.
 * v0.1
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
 
 ### How do I get set up? ###
 
