@@ -8,8 +8,24 @@
 
 #include "board_obj.h"
 
+
+//  iterators for range functions used as [begin, end)
+auto* Board::begin ( void ) const {
+    return &boardState[0];
+}
+
+auto* Board::end ( void ) const   {
+    return &boardState[9];
+}   //  implementation spec calls for max array length +1 position.
+
+
+
+
 Board::Board()  {   //  default constructor will initialise a randomised boardState array.
-    std::random_shuffle( std::begin( boardState ), std::end( boardState ) );    //  randomly shuffles the tiles!
+    
+    std::random_device rd;
+    std::mt19937 mt(rd.operator()());
+    std::shuffle( std::begin( boardState ), std::end( boardState ), mt );    //  randomly shuffles the tiles!
     for (int i = 0; i < boardState.size(); ++i)
         if (boardState[i] == 0) {
             emptyTile = i;  //  record location of empty (0) tile.
@@ -62,6 +78,7 @@ Board::Board( Board&& m ) : Board() {
 
 Board::~Board() //  faster not to be inline.
 {}
+
 
 
 Board& Board::operator= ( const Board& rhs )   {
@@ -258,7 +275,28 @@ const std::vector<enum tileMove>& Board::getMoveHistory()  {
 }
 
 
+void Board::printBoard( void )  {
+    for ( int i = 0; i < boardState.size(); ++i ) {
+        if (i == 3 || i == 6)
+            std::cout << std::endl;
+        std::cout << boardState[i] << " ";
+    }
+    std::cout << std::endl;
+}
 
 
+std::ostream& Board::toStream( std::ostream& os ) const {
+    os << "{ ";
+    for (auto& x : boardState)
+        os << x << " ";
+    os << "}";
+    return os;
+}
+
+
+std::ostream& operator<< ( std::ostream& os, const Board& B ) {
+    B.toStream( os );
+    return os;
+}
 
 

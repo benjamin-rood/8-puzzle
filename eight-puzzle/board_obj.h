@@ -12,11 +12,10 @@
 #include <iostream>
 #include <vector>
 #include <array>
+#include <random>
 
-#define U = 0;
-#define L = 1;
-#define D = 2;
-#define R = 3;
+//std::random_device rd;
+//std::mt19937_64 mt64(rd.operator()());
 
 enum tilePosition { topLeft = 0, topMid = 1, topRight = 2,
     centerLeft = 3, centerMid = 4, centerRight = 5,
@@ -31,12 +30,18 @@ private:
     uint32_t pathlength = 0;                                        //  current path length from initial (start) boardState to goal boardState of 012345678
     std::vector<enum tileMove> moveHistory;                                        //  stores a record of tile moves (e.g. U,U,D,L,R,D etc)
     
+    
 public:
     explicit Board( void );     //  default constructor will initialise a randomised boardState array.
     Board( const Board& b );    //  straight copy constructor
     Board( const Board& b, enum tileMove move );   //  copy constructor - copies board then applies move.
     Board( Board&& b );         //  move constructor
     ~Board( void );             //  no need for anything but the (system-provided) shallow destructor.
+    
+    //  iterators for range functions used as [begin, end)
+    auto* begin ( void ) const;
+    auto* end ( void ) const;
+    
     
     Board& operator= ( const Board& rhs );
     
@@ -46,10 +51,6 @@ public:
     const uint32_t& operator[] ( const int index ) const;   //  boardState index position access
     uint32_t& operator[] ( const int index );               //  boardState index position assignment
     
-    
-    //  iterators for range functions used as [begin, end)
-    auto* begin() const {   return &boardState[0];      }
-    auto* end() const   {   return &boardState[9];      }   //  implementation spec calls for max array length +1 position.
     
     std::vector<Board> spawnBoardMoves ( void );    //  spawns a vector of new Boards based on possible moves from current boardState. Equivalent to STATE EXPANSION! :-)
     
@@ -72,10 +73,13 @@ public:
     auto moveReverse ( const enum tileMove& move );
     auto okMove ( const enum tileMove& move );
     
+    void printBoard ( void );
+    
+    std::ostream& toStream( std::ostream& os ) const ;
+    
 };
 
-
-
+std::ostream& operator<< ( std::ostream& os, const Board& B );
 
 
 
