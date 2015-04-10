@@ -141,6 +141,8 @@ auto Board::okMove ( const enum tileMove& move )  {
     //  i.e. the reverse of any move up, left, down, right with values from 0-3,
     //  is (move+2)%4, and we compare this with the last move done
     //  to stop backtracking/obvious local loops.
+    if ( moveHistory.empty() )
+        return true;
     return ( lastMove() != moveReverse(move) );
 }
 
