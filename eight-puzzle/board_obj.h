@@ -13,20 +13,28 @@
 #include <vector>
 #include <array>
 
-enum tilePositions { topLeft, topMid, topRight,
-    centerLeft, centerMid, centerRight,
-    botLeft, botMid, botRight };
+#define U = 0;
+#define L = 1;
+#define D = 2;
+#define R = 3;
+
+enum tilePosition { topLeft = 0, topMid = 1, topRight = 2,
+    centerLeft = 3, centerMid = 4, centerRight = 5,
+    botLeft = 6, botMid = 7, botRight = 8 };
+
+enum tileMove { up = 0, left = 1, down = 2, right = 3 };
 
 class Board {
 private:
     std::array<uint32_t, 9> boardState = {{ 0,1,2,3,4,5,6,7,8 }} ;  //  stores a 1D representation of the eight-puzzle tile Board
-    enum tilePositions emptyTile = topLeft;                         //  location of empty tile (0 tile) in array. It's easier to not have to search for this ever single time, plus, we get a very readable name to use!
+    uint32_t emptyTile = topLeft;                         //  location of empty tile (0 tile) in array. It's easier to not have to search for this ever single time, plus, we get a very readable name to use!
     uint32_t pathlength = 0;                                        //  current path length from initial (start) boardState to goal boardState of 012345678
-    std::string moveHistory;                                        //  stores a record of tile moves (e.g. U,U,D,L,R,D etc)
+    std::vector<enum tileMove> moveHistory;                                        //  stores a record of tile moves (e.g. U,U,D,L,R,D etc)
     
 public:
     explicit Board( void );     //  default constructor will initialise a randomised boardState array.
     Board( const Board& b );    //  copy constructor
+    Board( const Board& b, enum tileMove move );   //  copy construct - copies board then applies move.
     Board( Board&& b );         //  move constructor
     ~Board( void );             //  no need for anything but the (system-provided) shallow destructor.
     
@@ -43,9 +51,9 @@ public:
     auto* begin() const {   return &boardState[0];      }
     auto* end() const   {   return &boardState[9];      }   //  implementation spec calls for max array length +1 position.
     
-    std::vector<Board> generateMoves ( void );
-    void recordMove ( const char& c );
-    void recordMove ( const Board& b, const char& c );
+    std::vector<Board> spawnBoardMoves ( void );
+    void recordMove ( enum tileMove m );
+    void recordMove ( const Board& b, enum tileMove m );
     
     void setState ( const std::array<uint32_t, 9> array );
     //const std::array<uint32_t, 9>& getState ( void );
@@ -56,11 +64,15 @@ public:
     void setPathLength ( const uint32_t& pl );
     const uint32_t& getPathLength ();
     
-    void setMoveHistory ( const std::string& mh );
-    const std::string& getMoveHistory();
+    void setMoveHistory ( const std::vector<enum tileMove>& mh );
+    const std::vector<enum tileMove>& getMoveHistory();
     
+    auto lastMove ( void );
+    auto moveReverse ( const enum tileMove& move );
+    auto okMove ( const enum tileMove& move );
     
 };
+
 
 
 

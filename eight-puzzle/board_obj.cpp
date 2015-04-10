@@ -12,13 +12,47 @@ Board::Board()  {   //  default constructor will initialise a randomised boardSt
     std::random_shuffle( std::begin( boardState ), std::end( boardState ) );    //  randomly shuffles the tiles!
     for (int i = 0; i < boardState.size(); ++i)
         if (boardState[i] == 0) {
-            emptyTile = (enum tilePositions)i;  //  record location of empty (0) tile.
+            emptyTile = i;  //  record location of empty (0) tile.
             break;
         }
 }
 
-Board::Board( const Board& b ) : emptyTile{ b.emptyTile },  pathlength{ b.pathlength }, moveHistory{ b.moveHistory }  {
+Board::Board( const Board& b ) : emptyTile{ b.emptyTile },
+    pathlength{ b.pathlength }, moveHistory{ b.moveHistory }  {
+        
     std::copy( std::begin( b ), std::end( b ), std::begin( boardState ) );
+}
+
+
+Board::Board( const Board& b, enum tileMove move )
+    : emptyTile{ b.emptyTile }, pathlength{ b.pathlength },
+    moveHistory{ b.moveHistory }  {
+        
+    std::copy( std::begin( b ), std::end( b ), std::begin( boardState ) );
+    
+    switch ( move ) {
+        case up:
+            std::swap(boardState[emptyTile], boardState[emptyTile-3]);
+            emptyTile -= 3;
+            break;
+        case left:
+            std::swap(boardState[emptyTile], boardState[emptyTile-1]);
+            emptyTile -= 1;
+            break;
+        case down:
+            std::swap(boardState[emptyTile], boardState[emptyTile+3]);
+            emptyTile += 3;
+            break;
+        case right:
+            std::swap(boardState[emptyTile], boardState[emptyTile+1]);
+            emptyTile += 1;
+            break;
+        default:
+            break;
+    }
+    
+    moveHistory.push_back( move );
+    
 }
 
 Board::Board( Board&& m ) : Board() {
@@ -74,20 +108,120 @@ uint32_t& Board::operator[] ( const int index )   {
 }
 
 
-std::vector<Board> Board::generateMoves ( void )    {
-    //
+auto Board::lastMove( void )    {
+    if ( moveHistory.empty() )
+        return (enum tileMove)emptyTile;
+    return moveHistory[moveHistory.size()-1];
+}
+
+auto Board::moveReverse( const enum tileMove& move )  {
+    return ((move+2) % 4);
+}
+
+auto Board::okMove ( const enum tileMove& move )  {
+    //  returning ( lastMove != ((move+2) mod 4 ))
+    //  i.e. the reverse of any move U,L,D,R with values from 0-3,
+    //  is (move+2)%4, and we compare this with the last move done
+    //  to stop backtracking/obvious local loops.
+    return ( lastMove() != moveReverse(move) );
 }
 
 
-void Board::recordMove ( const char& c )    {
-    moveHistory.push_back(c);
+std::vector<Board> Board::spawnBoardMoves ( void )    {
+    std::vector<Board> BoardMoves;
+    
+    switch ( emptyTile ) {
+        case topLeft:
+            if ( okMove( down ) )
+                BoardMoves.push_back( Board( *this, down ) );
+            if ( okMove( right ) )
+                BoardMoves.push_back( Board( *this, right ) );
+            break;
+            
+        case topMid:
+            if ( okMove( left ) )
+                BoardMoves.push_back( Board( *this, left ) );
+            if ( okMove( down ) )
+                BoardMoves.push_back( Board( *this, down ) );
+            if ( okMove( right ) )
+                BoardMoves.push_back( Board( *this, right ) );
+            break;
+            
+        case topRight:
+            if ( okMove( left ) )
+                BoardMoves.push_back( Board( *this, left ) );
+            if ( okMove( down ) )
+                BoardMoves.push_back( Board( *this, down ) );
+            break;
+            
+        case centerLeft:
+            if ( okMove( up ) )
+                BoardMoves.push_back( Board( *this, down ) );
+            if ( okMove( down ) )
+                BoardMoves.push_back( Board( *this, down ) );
+            if ( okMove( right ) )
+                BoardMoves.push_back( Board( *this, right ) );
+            break;
+        
+        case centerMid:
+            if ( okMove( up ) )
+                BoardMoves.push_back( Board( *this, down ) );
+            if ( okMove( left ) )
+                BoardMoves.push_back( Board( *this, left ) );
+            if ( okMove( down ) )
+                BoardMoves.push_back( Board( *this, down ) );
+            if ( okMove( right ) )
+                BoardMoves.push_back( Board( *this, right ) );
+            break;
+        
+        case centerRight:
+            if ( okMove( up ) )
+                BoardMoves.push_back( Board( *this, down ) );
+            if ( okMove( left ) )
+                BoardMoves.push_back( Board( *this, left ) );
+            if ( okMove( down ) )
+                BoardMoves.push_back( Board( *this, down ) );
+            break;
+        
+        case botLeft:
+            if ( okMove( up ) )
+                BoardMoves.push_back( Board( *this, down ) );
+            if ( okMove( right ) )
+                BoardMoves.push_back( Board( *this, right ) );
+            break;
+        
+        case botMid:
+            if ( okMove( up ) )
+                BoardMoves.push_back( Board( *this, down ) );
+            if ( okMove( left ) )
+                BoardMoves.push_back( Board( *this, left ) );
+            if ( okMove( right ) )
+                BoardMoves.push_back( Board( *this, right ) );
+            break;
+        
+        case botRight:
+            if ( okMove( up ) )
+                BoardMoves.push_back( Board( *this, down ) );
+            if ( okMove( left ) )
+                BoardMoves.push_back( Board( *this, left ) );
+            break;
+        default:
+            break;
+    }
+    
+    return BoardMoves;
 }
 
-void Board::recordMove ( const Board& b, const char& c )    {
+
+void Board::recordMove ( enum tileMove m )    {
+    moveHistory.push_back( m );
+}
+
+void Board::recordMove ( const Board& b, enum tileMove m )    {
     std::copy( std::begin( b ), std::end( b ), std::begin( boardState ) );
     emptyTile = b.emptyTile;
     pathlength = b.pathlength;
-    moveHistory.push_back(c);
+    moveHistory.push_back( m );
 }
 
 
@@ -114,13 +248,15 @@ const uint32_t& Board::getPathLength () {
     return pathlength;
 }
 
-void Board::setMoveHistory ( const std::string& mh )    {
+void Board::setMoveHistory ( const std::vector<enum tileMove>& mh )    {
     moveHistory = mh;
 }
 
-const std::string& Board::getMoveHistory()  {
+const std::vector<enum tileMove>& Board::getMoveHistory()  {
     return moveHistory;
 }
+
+
 
 
 
