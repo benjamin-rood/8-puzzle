@@ -12,7 +12,7 @@ Woo-Hoo! Here is Dave & Ben's 159.302 Assignment One: The Mystery of The Eight P
 
 * The **Master** branch is an Xcode project just for my convenience, but one only needs to modify the source files and push those.
 
-* Uses C++11 and C++14, at least temporarily. On submission will be 100% compatible with gcc installed in Massey Labs. NOTE: This is Ben's responsibility.
+* Uses C++11 and C++14, at least temporarily. On submission will be 100% compatible with gcc installed in Massey Labs. *NOTE: This is Ben's responsibility!*
 * C++ Language Dialect: `GNU++14 [-std=gnu++14]` or `C++14 [-std=c++14]`
 * C++ Standard Library: `libc++ (LLVM C++ standard library with C++11 Support)`
 
