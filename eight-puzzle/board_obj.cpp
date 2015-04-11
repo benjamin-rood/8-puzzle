@@ -51,19 +51,19 @@ Board::Board( const Board& b, enum tileMove move )  //  INTERNAL PRIVATE copy co
     std::copy( std::begin( b ), std::end( b ), std::begin( boardState ) );
     
     switch ( move ) {
-        case up:
+        case UP:
             std::swap(boardState[emptyTile], boardState[emptyTile-3]);
             emptyTile -= 3;
             break;
-        case left:
+        case LEFT:
             std::swap(boardState[emptyTile], boardState[emptyTile-1]);
             emptyTile -= 1;
             break;
-        case down:
+        case DOWN:
             std::swap(boardState[emptyTile], boardState[emptyTile+3]);
             emptyTile += 3;
             break;
-        case right:
+        case RIGHT:
             std::swap(boardState[emptyTile], boardState[emptyTile+1]);
             emptyTile += 1;
             break;
@@ -137,7 +137,7 @@ int Board::moveReverse( const enum tileMove& move ) const  {
 
 bool Board::okMove ( const enum tileMove& move )  const {
     //  returning ( lastMove != ((move+2) mod 4 ))
-    //  i.e. the reverse of any move up, left, down, right with values from 0-3,
+    //  i.e. the reverse of any move UP, LEFT, DOWN, RIGHT with values from 0-3,
     //  is (move+2)%4, and we compare this with the last move done
     //  to stop backtracking/obvious local loops.
     if ( moveHistory.empty() )
@@ -180,79 +180,79 @@ std::vector<Board> spawnBoardMovesFrom ( const Board& B )    {
     std::vector<Board> BoardMoves;
     
     switch ( B.emptyTile ) {
-        case topLeft:
-            if ( B.okMove( down ) )
-                BoardMoves.push_back( Board( B, down ) );
-            if ( B.okMove( right ) )
-                BoardMoves.push_back( Board( B, right ) );
+        case TOP_LEFT:
+            if ( B.okMove( DOWN ) )
+                BoardMoves.push_back( Board( B, DOWN ) );
+            if ( B.okMove( RIGHT ) )
+                BoardMoves.push_back( Board( B, RIGHT ) );
             break;
             
-        case topMid:
-            if ( B.okMove( left ) )
-                BoardMoves.push_back( Board( B, left ) );
-            if ( B.okMove( down ) )
-                BoardMoves.push_back( Board( B, down ) );
-            if ( B.okMove( right ) )
-                BoardMoves.push_back( Board( B, right ) );
+        case TOP_MID:
+            if ( B.okMove( LEFT ) )
+                BoardMoves.push_back( Board( B, LEFT ) );
+            if ( B.okMove( DOWN ) )
+                BoardMoves.push_back( Board( B, DOWN ) );
+            if ( B.okMove( RIGHT ) )
+                BoardMoves.push_back( Board( B, RIGHT ) );
             break;
             
-        case topRight:
-            if ( B.okMove( left ) )
-                BoardMoves.push_back( Board( B, left ) );
-            if ( B.okMove( down ) )
-                BoardMoves.push_back( Board( B, down ) );
+        case TOP_RIGHT:
+            if ( B.okMove( LEFT ) )
+                BoardMoves.push_back( Board( B, LEFT ) );
+            if ( B.okMove( DOWN ) )
+                BoardMoves.push_back( Board( B, DOWN ) );
             break;
             
-        case centerLeft:
-            if ( B.okMove( up ) )
-                BoardMoves.push_back( Board( B, up ) );
-            if ( B.okMove( down ) )
-                BoardMoves.push_back( Board( B, down ) );
-            if ( B.okMove( right ) )
-                BoardMoves.push_back( Board( B, right ) );
+        case CENTER_LEFT:
+            if ( B.okMove( UP ) )
+                BoardMoves.push_back( Board( B, UP ) );
+            if ( B.okMove( DOWN ) )
+                BoardMoves.push_back( Board( B, DOWN ) );
+            if ( B.okMove( RIGHT ) )
+                BoardMoves.push_back( Board( B, RIGHT ) );
             break;
             
-        case centerMid:
-            if ( B.okMove( up ) )
-                BoardMoves.push_back( Board( B, up ) );
-            if ( B.okMove( left ) )
-                BoardMoves.push_back( Board( B, left ) );
-            if ( B.okMove( down ) )
-                BoardMoves.push_back( Board( B, down ) );
-            if ( B.okMove( right ) )
-                BoardMoves.push_back( Board( B, right ) );
+        case CENTER_MID:
+            if ( B.okMove( UP ) )
+                BoardMoves.push_back( Board( B, UP ) );
+            if ( B.okMove( LEFT ) )
+                BoardMoves.push_back( Board( B, LEFT ) );
+            if ( B.okMove( DOWN ) )
+                BoardMoves.push_back( Board( B, DOWN ) );
+            if ( B.okMove( RIGHT ) )
+                BoardMoves.push_back( Board( B, RIGHT ) );
             break;
             
-        case centerRight:
-            if ( B.okMove( up ) )
-                BoardMoves.push_back( Board( B, up ) );
-            if ( B.okMove( left ) )
-                BoardMoves.push_back( Board( B, left ) );
-            if ( B.okMove( down ) )
-                BoardMoves.push_back( Board( B, down ) );
+        case CENTER_RIGHT:
+            if ( B.okMove( UP ) )
+                BoardMoves.push_back( Board( B, UP ) );
+            if ( B.okMove( LEFT ) )
+                BoardMoves.push_back( Board( B, LEFT ) );
+            if ( B.okMove( DOWN ) )
+                BoardMoves.push_back( Board( B, DOWN ) );
             break;
             
-        case botLeft:
-            if ( B.okMove( up ) )
-                BoardMoves.push_back( Board( B, up ) );
-            if ( B.okMove( right ) )
-                BoardMoves.push_back( Board( B, right ) );
+        case BOT_LEFT:
+            if ( B.okMove( UP ) )
+                BoardMoves.push_back( Board( B, UP ) );
+            if ( B.okMove( RIGHT ) )
+                BoardMoves.push_back( Board( B, RIGHT ) );
             break;
             
-        case botMid:
-            if ( B.okMove( up ) )
-                BoardMoves.push_back( Board( B, up ) );
-            if ( B.okMove( left ) )
-                BoardMoves.push_back( Board( B, left ) );
-            if ( B.okMove( right ) )
-                BoardMoves.push_back( Board( B, right ) );
+        case BOT_MID:
+            if ( B.okMove( UP ) )
+                BoardMoves.push_back( Board( B, UP ) );
+            if ( B.okMove( LEFT ) )
+                BoardMoves.push_back( Board( B, LEFT ) );
+            if ( B.okMove( RIGHT ) )
+                BoardMoves.push_back( Board( B, RIGHT ) );
             break;
             
-        case botRight:
-            if ( B.okMove( up ) )
-                BoardMoves.push_back( Board( B, up ) );
-            if ( B.okMove( left ) )
-                BoardMoves.push_back( Board( B, left ) );
+        case BOT_RIGHT:
+            if ( B.okMove( UP ) )
+                BoardMoves.push_back( Board( B, UP ) );
+            if ( B.okMove( LEFT ) )
+                BoardMoves.push_back( Board( B, LEFT ) );
             break;
         default:
             break;
@@ -274,19 +274,19 @@ void printBoard ( const Board& B )  {
 
 void printLastMove ( const Board& B )  {
     switch ( B.lastMove() ) {
-        case up:
+        case UP:
             std::cout << "U";
             break;
             
-        case left:
+        case LEFT:
             std::cout << "L";
             break;
             
-        case down:
+        case DOWN:
             std::cout << "D";
             break;
             
-        case right:
+        case RIGHT:
             std::cout << "R";
             break;
             
@@ -300,19 +300,19 @@ std::string getMoveHistoryString ( const Board& B ) {
     std::string mhs;
     for ( auto&m : B.moveHistory )  {
         switch ( m ) {
-            case up:
+            case UP:
                 mhs += "U";
                 break;
                 
-            case left:
+            case LEFT:
                 mhs += "L";
                 break;
                 
-            case down:
+            case DOWN:
                 mhs += "D";
                 break;
                 
-            case right:
+            case RIGHT:
                 mhs += "R";
                 break;
                 
@@ -337,19 +337,19 @@ Board recordMove ( const Board& B, enum tileMove move )    {
     newBoard.pathlength = B.pathlength;
     
     switch ( move ) {
-        case up:
+        case UP:
             std::swap(newBoard.boardState[newBoard.emptyTile], newBoard.boardState[newBoard.emptyTile-3]);
             newBoard.emptyTile -= 3;
             break;
-        case left:
+        case LEFT:
             std::swap(newBoard.boardState[newBoard.emptyTile], newBoard.boardState[newBoard.emptyTile-1]);
             newBoard.emptyTile -= 1;
             break;
-        case down:
+        case DOWN:
             std::swap(newBoard.boardState[newBoard.emptyTile], newBoard.boardState[newBoard.emptyTile+3]);
             newBoard.emptyTile += 3;
             break;
-        case right:
+        case RIGHT:
             std::swap(newBoard.boardState[newBoard.emptyTile], newBoard.boardState[newBoard.emptyTile+1]);
             newBoard.emptyTile += 1;
             break;

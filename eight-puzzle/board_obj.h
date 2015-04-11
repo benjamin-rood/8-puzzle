@@ -14,19 +14,17 @@
 #include <array>
 #include <random>
 
-//std::random_device rd;
-//std::mt19937_64 mt64(rd.operator()());
 
-enum tilePosition { topLeft = 0, topMid = 1, topRight = 2,
-    centerLeft = 3, centerMid = 4, centerRight = 5,
-    botLeft = 6, botMid = 7, botRight = 8 };
+enum tilePosition { TOP_LEFT = 0, TOP_MID = 1, TOP_RIGHT = 2,
+    CENTER_LEFT = 3, CENTER_MID = 4, CENTER_RIGHT = 5,
+    BOT_LEFT = 6, BOT_MID = 7, BOT_RIGHT = 8 };
 
-enum tileMove { up = 0, left = 1, down = 2, right = 3 };
+enum tileMove { UP = 0, LEFT = 1, DOWN = 2, RIGHT = 3 };
 
 class Board {
 private:
     std::array<uint32_t, 9> boardState = {{ 0,1,2,3,4,5,6,7,8 }} ;  //  stores a 1D representation of the eight-puzzle tile Board
-    uint32_t emptyTile = topLeft;                         //  location of empty tile (0 tile) in array. It's easier to not have to search for this ever single time, plus, we get a very readable name to use!
+    uint32_t emptyTile = TOP_LEFT;                         //  location of empty tile (0 tile) in array. It's easier to not have to search for this ever single time, plus, we get a very readable name to use!
     uint32_t pathlength = 0;                                        //  current path length from initial (start) boardState to goal boardState of 012345678
     std::vector<enum tileMove> moveHistory;                                        //  stores a record of tile moves (e.g. U,U,D,L,R,D etc)
     
