@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>8260B753-3ACC-41F5-A484-8E20CBADF157</string>
+	<key>IDESourceControlProjectName</key>
+	<string>eight-puzzle</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>99A9D25DBDFB8A6845E4FE8D855458CF9CFE51ED</key>
+		<string>https://bitbucket.org/benjamin_rood/eight-puzzle.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>eight-puzzle.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>99A9D25DBDFB8A6845E4FE8D855458CF9CFE51ED</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://bitbucket.org/benjamin_rood/eight-puzzle.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>99A9D25DBDFB8A6845E4FE8D855458CF9CFE51ED</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>99A9D25DBDFB8A6845E4FE8D855458CF9CFE51ED</string>
+			<key>IDESourceControlWCCName</key>
+			<string>eight-puzzle</string>
+		</dict>
+	</array>
+</dict>
+</plist>
