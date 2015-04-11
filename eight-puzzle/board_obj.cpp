@@ -26,6 +26,19 @@ Board::Board()  {   //  default constructor will initialise a randomised boardSt
         }
 }
 
+
+Board::Board ( const std::array<uint32_t, boardSize> boardState )   {
+    std::copy( std::begin( boardState ), std::end( boardState ), std::begin( this->boardState ) );
+    for (int i = 0; i < boardSize; ++i) {
+        if (boardState[i] == 0) {
+            emptyTile = i;  //  record location of empty (0) tile.
+            break;
+        }
+    }
+
+}
+
+
 Board::Board( const Board& b ) : emptyTile{ b.emptyTile },  //  straight copy constructor
     pathlength{ b.pathlength }, moveHistory{ b.moveHistory }  {
         
@@ -328,7 +341,7 @@ const std::vector<enum tileMove>& getMoveHistory ( const Board& B ) {
 }
 
 
-Board recordMove ( const Board& B, enum tileMove move )    {
+Board forceMove ( const Board& B, enum tileMove move )    {
     
     Board newBoard( B );
     std::copy( std::begin( B ), std::end( B ), std::begin( newBoard.boardState ) );
@@ -368,7 +381,6 @@ const std::array<uint32_t, 9>& getState ( const Board& B )    {
 }
 
 bool testForGoalState ( const Board& B )   {
-    std::array<uint32_t, 9> goalState = {{ 0,1,2,3,4,5,6,7,8 }};
     if ( std::equal( std::begin( B.boardState ), std::end( B.boardState ), std::begin( goalState ) ) )
         return true;
     return false;
