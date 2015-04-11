@@ -13,24 +13,13 @@
 //  BEGIN INTERNAL CLASS METHODS
 
 
-//  iterators for range functions used as [begin, end)
-auto* Board::begin ( void ) const {
-    return &boardState[0];
-}
-
-auto* Board::end ( void ) const   {
-    return &boardState[9];
-}   //  implementation spec calls for max array length +1 position.
-
-
-
 
 Board::Board()  {   //  default constructor will initialise a randomised boardState array.
     
     std::random_device rd;
     std::mt19937 mt(rd.operator()());
     std::shuffle( std::begin( boardState ), std::end( boardState ), mt );    //  randomly shuffles the tiles!
-    for (int i = 0; i < boardState.size(); ++i)
+    for (int i = 0; i < boardSize; ++i)
         if (boardState[i] == 0) {
             emptyTile = i;  //  record location of empty (0) tile.
             break;
@@ -81,6 +70,16 @@ Board::~Board() //  faster not to be inline.
 {}
 
 
+//  iterators for range functions used as [begin, end)
+const uint32_t* Board::begin ( void ) const {
+    return &boardState[0];
+}
+
+const uint32_t* Board::end ( void ) const   {
+    return &boardState[9];
+}   //  implementation spec calls for max array length +1 position.
+
+
 
 Board& Board::operator= ( const Board& rhs )   {
     if (this == &rhs)
@@ -111,7 +110,7 @@ const bool Board::operator!= ( const Board& rhs )   {
 const uint32_t& Board::operator[] ( const int index ) const {
     // run-time check, using STL exceptions:
     
-    if (index < 0 || boardState.size() <= index)
+    if (index < 0 || boardSize <= index)
         throw std::out_of_range{"Board::operator[]"};
     
     return boardState[index];
@@ -120,7 +119,7 @@ const uint32_t& Board::operator[] ( const int index ) const {
 uint32_t& Board::operator[] ( const int index )   {
     // run-time check, using STL exceptions:
     
-    if (index < 0 || boardState.size() <= index)
+    if (index < 0 || boardSize <= index)
         throw std::out_of_range{"Board::operator[]"};
     
     return boardState[index];
@@ -263,7 +262,7 @@ std::vector<Board> spawnBoardMovesFrom ( const Board& B )    {
 
 
 void printBoard ( const Board& B )  {
-    for ( int i = 0; i < B.boardState.size(); ++i ) {
+    for ( int i = 0; i < boardSize; ++i ) {
         if (i == 3 || i == 6)
             std::cout << std::endl;
         std::cout << B.boardState[i] << " ";

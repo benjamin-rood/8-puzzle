@@ -21,9 +21,11 @@ enum tilePosition { TOP_LEFT = 0, TOP_MID = 1, TOP_RIGHT = 2,
 
 enum tileMove { UP = 0, LEFT = 1, DOWN = 2, RIGHT = 3 };
 
+const int boardSize = 9;
+
 class Board {
 private:
-    std::array<uint32_t, 9> boardState = {{ 0,1,2,3,4,5,6,7,8 }} ;  //  stores a 1D representation of the eight-puzzle tile Board
+    std::array<uint32_t, boardSize> boardState = {{ 0,1,2,3,4,5,6,7,8 }} ;  //  stores a 1D representation of the eight-puzzle tile Board
     uint32_t emptyTile = TOP_LEFT;                         //  location of empty tile (0 tile) in array. It's easier to not have to search for this ever single time, plus, we get a very readable name to use!
     uint32_t pathlength = 0;                                        //  current path length from initial (start) boardState to goal boardState of 012345678
     std::vector<enum tileMove> moveHistory;                                        //  stores a record of tile moves (e.g. U,U,D,L,R,D etc)
@@ -40,8 +42,8 @@ public:
     ~Board ( void );             //  no need for anything but the (system-provided) shallow destructor.
     
     //  iterators for range functions used as [begin, end)
-    auto* begin ( void ) const;
-    auto* end ( void ) const;
+    const uint32_t* begin ( void ) const;
+    const uint32_t* end ( void ) const;
     
     Board& operator= ( const Board& rhs );  //  assignment operator.
     

@@ -14,7 +14,7 @@ int main(int argc, const char * argv[]) {
     std::cout << std::endl;
     
     std::vector<Board> firstMoves = spawnBoardMovesFrom( begin );
-    for (auto b : firstMoves)   {
+    for (auto& b : firstMoves)   {
         printLastMove( b );
         std::cout << std::endl;
         printBoard( b );
