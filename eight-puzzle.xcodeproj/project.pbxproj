@@ -7,12 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		23309F521AD8ADDD009E6176 /* WinMain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23309F471AD8ADDD009E6176 /* WinMain.cpp */; };
-		23309F531AD8ADDD009E6176 /* puzzle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23309F491AD8ADDD009E6176 /* puzzle.cpp */; };
-		23309F541AD8ADDD009E6176 /* makefile in Sources */ = {isa = PBXBuildFile; fileRef = 23309F4C1AD8ADDD009E6176 /* makefile */; };
-		23309F551AD8ADDD009E6176 /* algorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23309F4D1AD8ADDD009E6176 /* algorithm.cpp */; };
-		23309F561AD8ADDD009E6176 /* graphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23309F501AD8ADDD009E6176 /* graphics.cpp */; };
-		23309F571AD8ADDD009E6176 /* Animate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23309F511AD8ADDD009E6176 /* Animate.cpp */; };
+		23309F641AD8D344009E6176 /* Animate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23309F581AD8D344009E6176 /* Animate.cpp */; };
+		23309F651AD8D344009E6176 /* WinMain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23309F5A1AD8D344009E6176 /* WinMain.cpp */; };
+		23309F661AD8D344009E6176 /* puzzle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23309F5C1AD8D344009E6176 /* puzzle.cpp */; };
+		23309F671AD8D344009E6176 /* makefile in Sources */ = {isa = PBXBuildFile; fileRef = 23309F5F1AD8D344009E6176 /* makefile */; };
+		23309F681AD8D344009E6176 /* algorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23309F601AD8D344009E6176 /* algorithm.cpp */; };
+		23309F691AD8D344009E6176 /* graphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23309F631AD8D344009E6176 /* graphics.cpp */; };
 		23C90B671AD62CC7008A00F1 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23C90B661AD62CC7008A00F1 /* main.cpp */; };
 		23C90B6F1AD62D94008A00F1 /* board_obj.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23C90B6D1AD62D94008A00F1 /* board_obj.cpp */; };
 /* End PBXBuildFile section */
@@ -30,18 +30,18 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		23309F461AD8ADDD009E6176 /* run.bat */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = run.bat; sourceTree = "<group>"; };
-		23309F471AD8ADDD009E6176 /* WinMain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WinMain.cpp; sourceTree = "<group>"; };
-		23309F481AD8ADDD009E6176 /* puzzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = puzzle.h; sourceTree = "<group>"; };
-		23309F491AD8ADDD009E6176 /* puzzle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = puzzle.cpp; sourceTree = "<group>"; };
-		23309F4A1AD8ADDD009E6176 /* run_one.bat */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = run_one.bat; sourceTree = "<group>"; };
-		23309F4B1AD8ADDD009E6176 /* algorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = algorithm.h; sourceTree = "<group>"; };
-		23309F4C1AD8ADDD009E6176 /* makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = makefile; sourceTree = "<group>"; };
-		23309F4D1AD8ADDD009E6176 /* algorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = algorithm.cpp; sourceTree = "<group>"; };
-		23309F4E1AD8ADDD009E6176 /* clean.bat */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = clean.bat; sourceTree = "<group>"; };
-		23309F4F1AD8ADDD009E6176 /* graphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = graphics.h; sourceTree = "<group>"; };
-		23309F501AD8ADDD009E6176 /* graphics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = graphics.cpp; sourceTree = "<group>"; };
-		23309F511AD8ADDD009E6176 /* Animate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Animate.cpp; sourceTree = "<group>"; };
+		23309F581AD8D344009E6176 /* Animate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Animate.cpp; sourceTree = "<group>"; };
+		23309F591AD8D344009E6176 /* run.bat */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = run.bat; sourceTree = "<group>"; };
+		23309F5A1AD8D344009E6176 /* WinMain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WinMain.cpp; sourceTree = "<group>"; };
+		23309F5B1AD8D344009E6176 /* puzzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = puzzle.h; sourceTree = "<group>"; };
+		23309F5C1AD8D344009E6176 /* puzzle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = puzzle.cpp; sourceTree = "<group>"; };
+		23309F5D1AD8D344009E6176 /* run_one.bat */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = run_one.bat; sourceTree = "<group>"; };
+		23309F5E1AD8D344009E6176 /* algorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = algorithm.h; sourceTree = "<group>"; };
+		23309F5F1AD8D344009E6176 /* makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = makefile; sourceTree = "<group>"; };
+		23309F601AD8D344009E6176 /* algorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = algorithm.cpp; sourceTree = "<group>"; };
+		23309F611AD8D344009E6176 /* clean.bat */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = clean.bat; sourceTree = "<group>"; };
+		23309F621AD8D344009E6176 /* graphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = graphics.h; sourceTree = "<group>"; };
+		23309F631AD8D344009E6176 /* graphics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = graphics.cpp; sourceTree = "<group>"; };
 		23C90B631AD62CC7008A00F1 /* eight-puzzle */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "eight-puzzle"; sourceTree = BUILT_PRODUCTS_DIR; };
 		23C90B661AD62CC7008A00F1 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		23C90B6D1AD62D94008A00F1 /* board_obj.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = board_obj.cpp; sourceTree = "<group>"; };
@@ -78,18 +78,18 @@
 		23C90B651AD62CC7008A00F1 /* eight-puzzle */ = {
 			isa = PBXGroup;
 			children = (
-				23309F461AD8ADDD009E6176 /* run.bat */,
-				23309F471AD8ADDD009E6176 /* WinMain.cpp */,
-				23309F481AD8ADDD009E6176 /* puzzle.h */,
-				23309F491AD8ADDD009E6176 /* puzzle.cpp */,
-				23309F4A1AD8ADDD009E6176 /* run_one.bat */,
-				23309F4B1AD8ADDD009E6176 /* algorithm.h */,
-				23309F4C1AD8ADDD009E6176 /* makefile */,
-				23309F4D1AD8ADDD009E6176 /* algorithm.cpp */,
-				23309F4E1AD8ADDD009E6176 /* clean.bat */,
-				23309F4F1AD8ADDD009E6176 /* graphics.h */,
-				23309F501AD8ADDD009E6176 /* graphics.cpp */,
-				23309F511AD8ADDD009E6176 /* Animate.cpp */,
+				23309F581AD8D344009E6176 /* Animate.cpp */,
+				23309F591AD8D344009E6176 /* run.bat */,
+				23309F5A1AD8D344009E6176 /* WinMain.cpp */,
+				23309F5B1AD8D344009E6176 /* puzzle.h */,
+				23309F5C1AD8D344009E6176 /* puzzle.cpp */,
+				23309F5D1AD8D344009E6176 /* run_one.bat */,
+				23309F5E1AD8D344009E6176 /* algorithm.h */,
+				23309F5F1AD8D344009E6176 /* makefile */,
+				23309F601AD8D344009E6176 /* algorithm.cpp */,
+				23309F611AD8D344009E6176 /* clean.bat */,
+				23309F621AD8D344009E6176 /* graphics.h */,
+				23309F631AD8D344009E6176 /* graphics.cpp */,
 				23C90B661AD62CC7008A00F1 /* main.cpp */,
 				23C90B6D1AD62D94008A00F1 /* board_obj.cpp */,
 				23C90B6E1AD62D94008A00F1 /* board_obj.h */,
@@ -153,14 +153,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23309F681AD8D344009E6176 /* algorithm.cpp in Sources */,
 				23C90B6F1AD62D94008A00F1 /* board_obj.cpp in Sources */,
-				23309F531AD8ADDD009E6176 /* puzzle.cpp in Sources */,
 				23C90B671AD62CC7008A00F1 /* main.cpp in Sources */,
-				23309F571AD8ADDD009E6176 /* Animate.cpp in Sources */,
-				23309F521AD8ADDD009E6176 /* WinMain.cpp in Sources */,
-				23309F541AD8ADDD009E6176 /* makefile in Sources */,
-				23309F551AD8ADDD009E6176 /* algorithm.cpp in Sources */,
-				23309F561AD8ADDD009E6176 /* graphics.cpp in Sources */,
+				23309F671AD8D344009E6176 /* makefile in Sources */,
+				23309F661AD8D344009E6176 /* puzzle.cpp in Sources */,
+				23309F641AD8D344009E6176 /* Animate.cpp in Sources */,
+				23309F691AD8D344009E6176 /* graphics.cpp in Sources */,
+				23309F651AD8D344009E6176 /* WinMain.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -244,7 +244,7 @@
 		23C90B6B1AD62CC7008A00F1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CURRENT_PROJECT_VERSION = 0.1;
 				GCC_SHORT_ENUMS = YES;
@@ -256,7 +256,7 @@
 		23C90B6C1AD62CC7008A00F1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CURRENT_PROJECT_VERSION = 0.1;
 				GCC_SHORT_ENUMS = YES;
