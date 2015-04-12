@@ -36,8 +36,8 @@ class Board {
 private:
     std::array<uint32_t, boardSize> boardState = {{ 0,1,2,3,4,5,6,7,8 }} ;  //  stores a 1D representation of the eight-puzzle tile Board
     uint32_t emptyTile = TOP_LEFT;                              //  location of empty tile (0 tile) in array. It's easier to not have to search for this ever single time, plus, we get a very readable name to use!
-    int pathlength = 0;                                    //  current path length from initial (start) boardState to goal boardState of 012345678
-	int heuristic = 0;										//	initialised to 0
+    int32_t pathlength = 0;                                    //  current path length from initial (start) boardState to goal boardState of 012345678
+	int32_t heuristic = 0;										//	initialised to 0
 	uint32_t hash = 0;											//	initialised to 0 as init boardState = goalState.
 	std::vector<enum tileMove> moveHistory;                     //  stores a record of tile moves (e.g. U,U,D,L,R,D etc)
 	
@@ -68,7 +68,7 @@ public:
     
     std::ostream& toStream( std::ostream& os ) const ;
 	
-	void setHeuristic ( const uint32_t& hVal );
+	void setHeuristic ( const int32_t& hVal );
 	
 	const uint32_t& getHash ( void ) const;
 	const int getFCost ( void ) const;

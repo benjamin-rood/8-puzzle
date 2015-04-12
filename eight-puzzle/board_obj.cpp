@@ -162,7 +162,7 @@ std::ostream &Board::toStream(std::ostream &os) const {
   return os;
 }
 
-void Board::setHeuristic(const uint32_t &hVal) { heuristic = (int)hVal; }
+void Board::setHeuristic(const int32_t& hVal) { heuristic = hVal; }
 
 const uint32_t &Board::getHash(void) const { return hash; }
 
