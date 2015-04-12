@@ -105,11 +105,13 @@ string uniformCost_Exp_List(string const initialState, string const goalState, i
 	//see alg from slides (slide #109)
 
 	//variables
+
+	//running Queue as a vextor initally as simpler for random delete.
 	std::vector<board> queueVector;
 	//std::priority_queue<Board, std::vector<Board> queuePriority;
 	int currentQueueLength = 0;
 	Board* currentBoard = new Board(initialState);
-	std::vector<Board> expandedNodes;
+	std::stack<Board> expandedNodes;
 	Board* expandedBoard = NULL;
 
 	//initialise values
@@ -130,19 +132,20 @@ string uniformCost_Exp_List(string const initialState, string const goalState, i
     		expandedNodes.pop_back();
   	
   			//test for match in expanded list
-			if(!findInList(hashBoardState(getState(expandedBoard))){
+			if(!findInList(expandedBoard.getHash()){
 				//check if there is a path collision in the queue
-				for(){ //boards in queue
-					if(expandedBoard.hash == boardFromQueue.hash) //compare hashes only, no fcost inclusion
-						//keep one already in queue if = or lower fcost
-						if(boardFromQueue.fcost <= expandedBoard.fcost){
-							//delete expandedBoard
-						}else{
+				for (auto& boardFromQueue : queue){ //boards in queue
+					if(expandedBoard.getHash() == boardFromQueue.getHash()) //compare hashes only, no fcost inclusion
+						//replace one already in queue only if lower fcost
+						if(boardFromQueue.getFCost() > expandedBoard.getFCost()){
 							//delete board from queue
 							//push currentboard onto queue
-							queue.push(expandedBoard);
+							queue.push_back(expandedBoard);
 							currentQLength++;
 							maxQLength = std::max(maxQLength, currentQlength);
+							
+						}else{
+							//delete expandedBoard
 						}
 				}
 			}else{
