@@ -9,15 +9,24 @@
 #include "board_obj.h"
 
 int main(int argc, const char * argv[]) {
-    Board begin;
+    Board begin(start1State);
     printBoard( begin );
     std::cout << std::endl;
-    
-    std::vector<Board> firstMoves = spawnBoardMovesFrom( begin );
-    for (auto& b : firstMoves)   {
-        printLastMove( b );
+	
+	auto firstMoves = spawnBoardMovesFrom( begin );
+
+	
+	
+	std::cout << std::endl;
+	for (auto& b : *firstMoves)   {
+        printLastMove( *b );
         std::cout << std::endl;
-        printBoard( b );
+        printBoard( *b );
         std::cout << std::endl;
     }
+	
+	for (auto b : *firstMoves)   {
+		delete b;
+	}
+	delete firstMoves;
 }

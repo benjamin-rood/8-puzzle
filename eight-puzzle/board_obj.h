@@ -36,8 +36,11 @@ private:
     std::array<uint32_t, boardSize> boardState = {{ 0,1,2,3,4,5,6,7,8 }} ;  //  stores a 1D representation of the eight-puzzle tile Board
     uint32_t emptyTile = TOP_LEFT;                              //  location of empty tile (0 tile) in array. It's easier to not have to search for this ever single time, plus, we get a very readable name to use!
     uint32_t pathlength = 0;                                    //  current path length from initial (start) boardState to goal boardState of 012345678
-    std::vector<enum tileMove> moveHistory;                     //  stores a record of tile moves (e.g. U,U,D,L,R,D etc)
-    
+	uint32_t heuristic = 0;										//	initialised to 0
+	uint32_t hash = 0;											//	initialised to 0 as init boardState = goalState.
+	std::vector<enum tileMove> moveHistory;                     //  stores a record of tile moves (e.g. U,U,D,L,R,D etc)
+	
+	
     int lastMove ( void ) const;
     int moveReverse ( const enum tileMove& move ) const;
     Board( const Board& B, enum tileMove move );                //  INTERNAL copy constructor - copies from another Board then applies move.
@@ -63,8 +66,14 @@ public:
     uint32_t& operator[] ( const int index );               //  boardState index position assignment
     
     std::ostream& toStream( std::ostream& os ) const ;
-    
-    friend std::vector<Board> spawnBoardMovesFrom ( const Board& B );    //  spawns a vector of new Boards based on possible moves from current boardState. Equivalent to STATE EXPANSION! :-)
+	
+	void setHeuristic ( const uint32_t& hVal );
+	
+	const uint32_t& getHash ( void ) const;
+	const uint32_t getFCost ( void ) const;
+	
+	
+    friend std::vector<Board*>* spawnBoardMovesFrom ( const Board& B );    //  spawns a vector of new Boards based on possible moves from current boardState. Equivalent to STATE EXPANSION! :-)
     friend void printBoard ( const Board& B );
     friend void printLastMove ( const Board& B );
     friend std::string getMoveHistoryString ( const Board& B );
@@ -79,7 +88,10 @@ std::ostream& operator<< ( std::ostream& os, const Board& B );
 
 
 
-
+//	HASHING FUNCTIONALITY
+int factorial(int n);
+const uint32_t hashBoardState(const Board &board);
+const uint32_t hashBoardState(const std::array<uint32_t, boardSize> boardArray);
 
 
 
