@@ -162,11 +162,11 @@ std::ostream &Board::toStream(std::ostream &os) const {
   return os;
 }
 
-void Board::setHeuristic(const uint32_t &hVal) { heuristic = hVal; }
+void Board::setHeuristic(const uint32_t &hVal) { heuristic = (int)hVal; }
 
 const uint32_t &Board::getHash(void) const { return hash; }
 
-const uint32_t Board::getFCost(void) const { return pathlength + heuristic; }
+const int Board::getFCost(void) const { return pathlength + heuristic; }
 
 //  END INTERNAL CLASS METHODS
 
@@ -177,87 +177,90 @@ std::ostream &operator<<(std::ostream &os, const Board &B) {
   return os;
 }
 
-//  END EXTERNAL BOARD FUNCTIONS
-
 //  BEGING BOARD-FRIENDLY FUNCTIONS
 
-std::vector<Board *> *spawnBoardMovesFrom(const Board &B) {
-  std::vector<Board *> *BoardMoves = new std::vector<Board *>;
+std::stack<std::shared_ptr<Board>>
+spawnBoardMovesFrom(const std::shared_ptr<Board> B) {
+  return spawnBoardMovesFrom(*B);
+}
+
+std::stack<std::shared_ptr<Board>> spawnBoardMovesFrom(const Board &B) {
+  std::stack<std::shared_ptr<Board>> BoardMoves;
 
   switch (B.emptyTile) {
   case TOP_LEFT:
     if (B.okMove(DOWN))
-      BoardMoves->push_back(new Board(B, DOWN));
+      BoardMoves.emplace(std::make_shared<Board>(B, DOWN));
     if (B.okMove(RIGHT))
-      BoardMoves->push_back(new Board(B, RIGHT));
+      BoardMoves.emplace(std::make_shared<Board>(B, RIGHT));
     break;
 
   case TOP_MID:
     if (B.okMove(LEFT))
-      BoardMoves->push_back(new Board(B, LEFT));
+      BoardMoves.emplace(std::make_shared<Board>(B, LEFT));
     if (B.okMove(DOWN))
-      BoardMoves->push_back(new Board(B, DOWN));
+      BoardMoves.emplace(std::make_shared<Board>(B, DOWN));
     if (B.okMove(RIGHT))
-      BoardMoves->push_back(new Board(B, RIGHT));
+      BoardMoves.emplace(std::make_shared<Board>(B, RIGHT));
     break;
 
   case TOP_RIGHT:
     if (B.okMove(LEFT))
-      BoardMoves->push_back(new Board(B, LEFT));
+      BoardMoves.emplace(std::make_shared<Board>(B, LEFT));
     if (B.okMove(DOWN))
-      BoardMoves->push_back(new Board(B, DOWN));
+      BoardMoves.emplace(std::make_shared<Board>(B, DOWN));
     break;
 
   case CENTER_LEFT:
     if (B.okMove(UP))
-      BoardMoves->push_back(new Board(B, UP));
+      BoardMoves.emplace(std::make_shared<Board>(B, UP));
     if (B.okMove(DOWN))
-      BoardMoves->push_back(new Board(B, DOWN));
+      BoardMoves.emplace(std::make_shared<Board>(B, DOWN));
     if (B.okMove(RIGHT))
-      BoardMoves->push_back(new Board(B, RIGHT));
+      BoardMoves.emplace(std::make_shared<Board>(B, RIGHT));
     break;
 
   case CENTER_MID:
     if (B.okMove(UP))
-      BoardMoves->push_back(new Board(B, UP));
+      BoardMoves.emplace(std::make_shared<Board>(B, UP));
     if (B.okMove(LEFT))
-      BoardMoves->push_back(new Board(B, LEFT));
+      BoardMoves.emplace(std::make_shared<Board>(B, LEFT));
     if (B.okMove(DOWN))
-      BoardMoves->push_back(new Board(B, DOWN));
+      BoardMoves.emplace(std::make_shared<Board>(B, DOWN));
     if (B.okMove(RIGHT))
-      BoardMoves->push_back(new Board(B, RIGHT));
+      BoardMoves.emplace(std::make_shared<Board>(B, RIGHT));
     break;
 
   case CENTER_RIGHT:
     if (B.okMove(UP))
-      BoardMoves->push_back(new Board(B, UP));
+      BoardMoves.emplace(std::make_shared<Board>(B, UP));
     if (B.okMove(LEFT))
-      BoardMoves->push_back(new Board(B, LEFT));
+      BoardMoves.emplace(std::make_shared<Board>(B, LEFT));
     if (B.okMove(DOWN))
-      BoardMoves->push_back(new Board(B, DOWN));
+      BoardMoves.emplace(std::make_shared<Board>(B, DOWN));
     break;
 
   case BOT_LEFT:
     if (B.okMove(UP))
-      BoardMoves->push_back(new Board(B, UP));
+      BoardMoves.emplace(std::make_shared<Board>(B, UP));
     if (B.okMove(RIGHT))
-      BoardMoves->push_back(new Board(B, RIGHT));
+      BoardMoves.emplace(std::make_shared<Board>(B, RIGHT));
     break;
 
   case BOT_MID:
     if (B.okMove(UP))
-      BoardMoves->push_back(new Board(B, UP));
+      BoardMoves.emplace(std::make_shared<Board>(B, UP));
     if (B.okMove(LEFT))
-      BoardMoves->push_back(new Board(B, LEFT));
+      BoardMoves.emplace(std::make_shared<Board>(B, LEFT));
     if (B.okMove(RIGHT))
-      BoardMoves->push_back(new Board(B, RIGHT));
+      BoardMoves.emplace(std::make_shared<Board>(B, RIGHT));
     break;
 
   case BOT_RIGHT:
     if (B.okMove(UP))
-      BoardMoves->push_back(new Board(B, UP));
+      BoardMoves.emplace(std::make_shared<Board>(B, UP));
     if (B.okMove(LEFT))
-      BoardMoves->push_back(new Board(B, LEFT));
+      BoardMoves.emplace(std::make_shared<Board>(B, LEFT));
     break;
   default:
     break;
@@ -265,6 +268,17 @@ std::vector<Board *> *spawnBoardMovesFrom(const Board &B) {
 
   return BoardMoves;
 }
+
+void generateAdmissibleHeuristic(std::shared_ptr<Board> B) {
+  generateAdmissibleHeuristic(*B);
+}
+
+void generateAdmissibleHeuristic(Board &B) {
+  for (int i = 0; i < boardSize; ++i)
+    B.heuristic += abs((i - ((int)B[i] + 1)) / 2);
+}
+
+void printBoard(const std::shared_ptr<Board> B) { printBoard(*B); }
 
 void printBoard(const Board &B) {
   for (int i = 0; i < boardSize; ++i) {
@@ -274,6 +288,8 @@ void printBoard(const Board &B) {
   }
   std::cout << std::endl;
 }
+
+void printLastMove(const std::shared_ptr<Board> B) { printLastMove(*B); }
 
 void printLastMove(const Board &B) {
   switch (B.lastMove()) {
@@ -296,6 +312,10 @@ void printLastMove(const Board &B) {
   default:
     break;
   }
+}
+
+std::string getMoveHistoryString(const std::shared_ptr<Board> B) {
+  return getMoveHistoryString(*B);
 }
 
 std::string getMoveHistoryString(const Board &B) {
@@ -325,11 +345,19 @@ std::string getMoveHistoryString(const Board &B) {
   return mhs;
 }
 
-const std::vector<enum tileMove> &getMoveHistory(const Board &B) {
+const std::vector<enum tileMove>& getMoveHistory ( const std::shared_ptr<Board> B ) {
+	return getMoveHistory( *B );
+}
+
+const std::vector<enum tileMove>& getMoveHistory(const Board &B) {
   return B.moveHistory;
 }
 
-Board forceMove(const Board &B, enum tileMove move) {
+std::shared_ptr<Board> forceMove ( const std::shared_ptr<Board> B, enum tileMove& move ) {
+	return std::make_shared<Board>( forceMove( *B, move ) );
+}
+
+Board forceMove(const Board &B, enum tileMove& move) {
 
   Board newBoard(B);
   std::copy(std::begin(B), std::end(B), std::begin(newBoard.boardState));
@@ -363,11 +391,21 @@ Board forceMove(const Board &B, enum tileMove move) {
 
   newBoard.moveHistory.push_back(move);
   ++newBoard.pathlength;
+	newBoard.hash = hashBoardState( newBoard );
 
   return newBoard;
 }
 
-const std::array<uint32_t, 9> &getState(const Board &B) { return B.boardState; }
+const std::array<uint32_t, 9>& getState ( const std::shared_ptr<Board> B ) {
+	return getState( *B );
+}
+
+const std::array<uint32_t, 9>& getState(const Board &B) { return B.boardState; }
+
+bool testForGoalState ( const std::shared_ptr<Board> B ) {
+	return testForGoalState( *B );
+}
+
 
 bool testForGoalState(const Board &B) {
   if (std::equal(std::begin(B.boardState), std::end(B.boardState),
@@ -376,7 +414,11 @@ bool testForGoalState(const Board &B) {
   return false;
 }
 
-const uint32_t &getPathLength(const Board &B) { return B.pathlength; }
+const int& getPathLength(const std::shared_ptr<Board> B) {
+  return getPathLength(*B);
+}
+
+const int& getPathLength(const Board &B) { return B.pathlength; }
 
 //	HASHING FUNCTIONALITY
 
@@ -386,8 +428,12 @@ int factorial(int n) {
 }
 
 const uint32_t hashBoardState(const Board &board) {
-  std::array<uint32_t, boardSize> boardArray = getState(board);
-  return hashBoardState(boardArray);
+	std::array<uint32_t, boardSize> boardArray = getState(board);
+	return hashBoardState(boardArray);
+}
+
+const uint32_t hashBoardState(const std::shared_ptr<Board> B) {
+	return hashBoardState(*B);
 }
 
 const uint32_t
@@ -419,3 +465,5 @@ hashBoardState(const std::array<uint32_t, boardSize> boardArray) {
 }
 
 //  END BOARD-FRIENDLY FUNCTIONS
+
+//  END EXTERNAL BOARD FUNCTIONS
