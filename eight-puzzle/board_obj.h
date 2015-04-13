@@ -62,7 +62,7 @@ public:
     
     const bool operator== ( const Board& rhs );             //  obj comparison
     const bool operator!= ( const Board& rhs );             //  obj comparison
-    
+	
     const uint32_t& operator[] ( const int index ) const;   //  boardState index position access
     uint32_t& operator[] ( const int index );               //  boardState index position assignment
     
@@ -104,6 +104,8 @@ public:
 	friend const int& getPathLength ( const Board& B );
 	friend const int& getPathLength ( const std::shared_ptr<Board> B );
 
+	friend const int32_t& getHeuristic ( const Board& B );
+	friend const int32_t& getHeuristic ( const std::shared_ptr<Board> B );
 };
 
 std::ostream& operator<< ( std::ostream& os, const Board& B );
@@ -116,6 +118,11 @@ const uint32_t hashBoardState ( const Board& board );
 const uint32_t hashBoardState ( const std::shared_ptr<Board> B );
 const uint32_t hashBoardState ( const std::array<uint32_t, boardSize> boardArray );
 
+
+const bool operator< ( const Board& lhs, const Board& rhs );
+const bool operator< ( const std::shared_ptr<Board>& lhs, const std::shared_ptr<Board>& rhs );
+const bool operator> ( const Board& lhs, const Board& rhs );
+const bool operator> ( const std::shared_ptr<Board>& lhs, const std::shared_ptr<Board>& rhs );
 
 
 

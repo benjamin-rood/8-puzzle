@@ -80,10 +80,11 @@ Board::Board(const Board &b, enum tileMove move) //  INTERNAL PRIVATE copy
   moveHistory.push_back(move);
   ++pathlength;
   hash = hashBoardState(boardState);
+  std::cout << "created Board with hash:\t" << this->getHash() << std::endl;
 }
 
 Board::~Board() {
-  std::cout << "destroying Board with state:\t" << *this << std::endl;
+  std::cout << "destroying Board with hash:\t" << this->getHash() << std::endl;
 }
 
 //  iterators for range functions used as [begin, end)
@@ -162,7 +163,7 @@ std::ostream &Board::toStream(std::ostream &os) const {
   return os;
 }
 
-void Board::setHeuristic(const int32_t& hVal) { heuristic = hVal; }
+void Board::setHeuristic(const int32_t &hVal) { heuristic = hVal; }
 
 const uint32_t &Board::getHash(void) const { return hash; }
 
@@ -345,19 +346,21 @@ std::string getMoveHistoryString(const Board &B) {
   return mhs;
 }
 
-const std::vector<enum tileMove>& getMoveHistory ( const std::shared_ptr<Board> B ) {
-	return getMoveHistory( *B );
+const std::vector<enum tileMove> &
+getMoveHistory(const std::shared_ptr<Board> B) {
+  return getMoveHistory(*B);
 }
 
-const std::vector<enum tileMove>& getMoveHistory(const Board &B) {
+const std::vector<enum tileMove> &getMoveHistory(const Board &B) {
   return B.moveHistory;
 }
 
-std::shared_ptr<Board> forceMove ( const std::shared_ptr<Board> B, enum tileMove& move ) {
-	return std::make_shared<Board>( forceMove( *B, move ) );
+std::shared_ptr<Board> forceMove(const std::shared_ptr<Board> B,
+                                 enum tileMove &move) {
+  return std::make_shared<Board>(forceMove(*B, move));
 }
 
-Board forceMove(const Board &B, enum tileMove& move) {
+Board forceMove(const Board &B, enum tileMove &move) {
 
   Board newBoard(B);
   std::copy(std::begin(B), std::end(B), std::begin(newBoard.boardState));
@@ -391,21 +394,20 @@ Board forceMove(const Board &B, enum tileMove& move) {
 
   newBoard.moveHistory.push_back(move);
   ++newBoard.pathlength;
-	newBoard.hash = hashBoardState( newBoard );
+  newBoard.hash = hashBoardState(newBoard);
 
   return newBoard;
 }
 
-const std::array<uint32_t, 9>& getState ( const std::shared_ptr<Board> B ) {
-	return getState( *B );
+const std::array<uint32_t, 9> &getState(const std::shared_ptr<Board> B) {
+  return getState(*B);
 }
 
-const std::array<uint32_t, 9>& getState(const Board &B) { return B.boardState; }
+const std::array<uint32_t, 9> &getState(const Board &B) { return B.boardState; }
 
-bool testForGoalState ( const std::shared_ptr<Board> B ) {
-	return testForGoalState( *B );
+bool testForGoalState(const std::shared_ptr<Board> B) {
+  return testForGoalState(*B);
 }
-
 
 bool testForGoalState(const Board &B) {
   if (std::equal(std::begin(B.boardState), std::end(B.boardState),
@@ -414,11 +416,17 @@ bool testForGoalState(const Board &B) {
   return false;
 }
 
-const int& getPathLength(const std::shared_ptr<Board> B) {
+const int &getPathLength(const std::shared_ptr<Board> B) {
   return getPathLength(*B);
 }
 
-const int& getPathLength(const Board &B) { return B.pathlength; }
+const int &getPathLength(const Board &B) { return B.pathlength; }
+
+const int32_t &getHeuristic(const std::shared_ptr<Board> B) {
+  return getHeuristic(*B);
+}
+
+const int32_t &getHeuristic(const Board &B) { return B.heuristic; }
 
 //	HASHING FUNCTIONALITY
 
@@ -428,12 +436,12 @@ int factorial(int n) {
 }
 
 const uint32_t hashBoardState(const Board &board) {
-	std::array<uint32_t, boardSize> boardArray = getState(board);
-	return hashBoardState(boardArray);
+  std::array<uint32_t, boardSize> boardArray = getState(board);
+  return hashBoardState(boardArray);
 }
 
 const uint32_t hashBoardState(const std::shared_ptr<Board> B) {
-	return hashBoardState(*B);
+  return hashBoardState(*B);
 }
 
 const uint32_t
@@ -465,5 +473,24 @@ hashBoardState(const std::array<uint32_t, boardSize> boardArray) {
 }
 
 //  END BOARD-FRIENDLY FUNCTIONS
+
+const bool operator<(const std::shared_ptr<Board> &lhs,
+                     const std::shared_ptr<Board> &rhs) {
+  return operator<(*lhs, *rhs);
+}
+
+const bool operator<(const Board &lhs, const Board &rhs) {
+  return (getPathLength(lhs) + getHeuristic(lhs)) <
+         (getPathLength(rhs) + getHeuristic(rhs));
+}
+
+const bool operator>(const std::shared_ptr<Board> &lhs,
+                     const std::shared_ptr<Board> &rhs) {
+  return !operator<(*lhs, *rhs);
+}
+
+const bool operator>(const Board &lhs, const Board &rhs) {
+  return !operator<(lhs, rhs);
+}
 
 //  END EXTERNAL BOARD FUNCTIONS
