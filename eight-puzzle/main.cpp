@@ -8,9 +8,13 @@
 
 #include "board_obj.h"
 #include <bitset>
+#include <stack>
+#include <set>
+
+const uint32_t domain_size = 362880;
 
 //	a tester function to do a print the status of flag
-void print_inBitSet( const std::bitset<362880>& set, const Board& B )	{
+void print_inBitSet( const std::bitset<domain_size>& set, const Board& B )	{
 	std::cout << "Board has been visited:\t";
 	if (set[B.getHash()])
 		std::cout << "YES\n";
@@ -19,58 +23,182 @@ void print_inBitSet( const std::bitset<362880>& set, const Board& B )	{
 
 int main(int argc, const char * argv[]) {
 	
-	// TESTING BOARD FUNCTIONALITY
-	std::vector<std::shared_ptr<Board>> enqueuedList;
-	std::bitset<362880> visitedList; // the same type gets used for both visited and strict expanded list.
-									 //	a bitset is initialised by default with all bits set to 0 (false).
-    Board begin(start2State);
-	generateAdmissibleHeuristic( begin );
-	std::cout << begin.getHash() << std::endl;
-	std::cout << "f = " << begin.getFCost() << std::endl;
-	printBoard( begin );
-	print_inBitSet(visitedList, begin);
-    std::cout << std::endl;
+	// DEPTH-FIRST SEARCH:
 	
-	auto newMoves = spawnBoardMovesFrom( begin ); // automatically give me A STACK OF BOARD SHARED_PTRses! YAY!
+	std::stack<std::shared_ptr<Board>> Q;
+	std::stack<std::shared_ptr<Board>> expandedStack;
+	std::bitset<domain_size> visitedList;			//	the same type gets used for both visited and strict expanded list.
+													//	a bitset is initialised by default with all bits set to 0 (false).
 	
-	visitedList.set(begin.getHash());
+	std::shared_ptr<Board> start = std::make_shared<Board>( simpleState );
+	Q.push( start );
+	std::shared_ptr<Board>& B = start;
+	printBoard( B );
 	
-	while (!( newMoves.empty() )) {
-		generateAdmissibleHeuristic( newMoves.top() );
-		std::cout << newMoves.top()->getHash() << std::endl;
-		printLastMove( newMoves.top() );	//	note the lack of dereferencing because of function overloading.
-		std::cout << "\tf = " << newMoves.top()->getFCost() << std::endl;
-		printBoard( newMoves.top() );
-		print_inBitSet(visitedList, *newMoves.top());
-		std::cout << std::endl;
-		visitedList.set(newMoves.top()->getHash());
-		// insert functionality which checks for state clashes with visited list and enqued list...
-		enqueuedList.push_back( newMoves.top() );	//	... if everything's kosher, add the Board to the enqueued list...
-		newMoves.pop();	//	...and once that's done, pop it from the temporary stack
+	while (!( Q.empty() ))	{
+		
+		B = Q.top();
+		if ( testForGoalState(B) ) break;
+		expandedStack = spawnBoardMovesFrom( B );
+		Q.pop();	//	once expanded, get rid of B
+		
+		while (!( expandedStack.empty() )) {
+			auto& top = expandedStack.top();
+			Q.push( top );
+			expandedStack.pop();
+		}
 	}
 	
-	std::sort(enqueuedList.begin(), enqueuedList.end());
+	std::string successPath = getMoveHistoryString( B );
 	
-	
-	
-	for ( auto&b : enqueuedList )   {
-		std::cout << b->getHash() << std::endl;
-        printLastMove( b );	//	note the lack of dereferencing!
-		std::cout << "\tf = " << b->getFCost() << std::endl;	//	see, if getFcost was a friend function instead of a member method we wouldn't have to use the -> arrow ;-)
-        printBoard( b );
-		print_inBitSet(visitedList, *b);
-        std::cout << std::endl;
-    }
-	
-
-	
-	
-	// now let's arbitrarily remove something from the end of the enqueued list to prove that reference counting works:
-	enqueuedList.pop_back();
-	std::cout<<"poop!"<<std::endl;
-	
-	// as you see in the terminal output, it did!
-	
-	// finally as main ends, all other Board instances are safely deleted!
+	for ( auto& s : successPath )
+		std::cout << s << " > ";
+	std::cout << "GOAL\n";
 	
 }
+
+
+
+//	std::vector<int> v { 3, 12, 4, 11, 5, 9 };
+//
+//	std::sort(v.begin(), v.end(), std::less<int>());
+//
+//	std::cout << "v: ";
+//	for (auto i : v) std::cout << i << ' ';
+//	std::cout << '\n';
+//
+//	v.push_back(1);
+//
+//	std::cout << "v: ";
+//	for (auto i : v) std::cout << i << ' ';
+//	std::cout << '\n';
+//
+//	std::sort(v.begin(), v.end(), std::less<int>());
+//
+//	std::cout << "v: ";
+//	for (auto i : v) std::cout << i << ' ';
+//	std::cout << '\n';
+//
+//
+//
+//	// TESTING BOARD FUNCTIONALITY
+//	std::vector<std::shared_ptr<Board>> enqueuedList;
+//	std::bitset<domain_size> visitedList;			//	the same type gets used for both visited and strict expanded list.
+//													//	a bitset is initialised by default with all bits set to 0 (false).
+//
+//
+//	enqueuedList.push_back(std::make_shared<Board>(start4State));
+//	enqueuedList.push_back(std::make_shared<Board>(start1State));
+//	enqueuedList.push_back(std::make_shared<Board>(start3State));
+//
+//	std::cout << "\nBefore make_heap:\n";
+//	for (auto& b : enqueuedList) {
+//		generateAdmissibleHeuristic( b );
+//		std::cout << b->getHash() << std::endl;
+//		std::cout << "f = " << b->getFCost() << std::endl;
+//		//printBoard(b);
+//		std::cout << '\n';
+//	}
+//
+//	std::make_heap( enqueuedList.begin(), enqueuedList.end() );
+//
+//	std::cout << "\nAfter make_heap:\n";
+//	for (auto& b : enqueuedList) {
+//		std::cout << b->getHash() << std::endl;
+//		std::cout << "f = " << b->getFCost() << std::endl;
+//		//printBoard(b);
+//		std::cout << '\n';
+//	}
+//
+//	enqueuedList.push_back(std::make_shared<Board>(start5State));
+//	generateAdmissibleHeuristic( enqueuedList[enqueuedList.size()-1] );
+//
+//	std::cout << "before push_heap: \n";
+//	for (auto& b : enqueuedList) {
+//		std::cout << b->getHash() << std::endl;
+//		std::cout << "f = " << b->getFCost() << std::endl;
+//		//printBoard(b);
+//		std::cout << '\n';
+//	}
+//
+//	std::push_heap(enqueuedList.begin(), enqueuedList.end());
+//
+//	std::cout << "after push_heap: \n";
+//	for (auto& b : enqueuedList) {
+//		std::cout << b->getHash() << std::endl;
+//		std::cout << "f = " << b->getFCost() << std::endl;
+//		//printBoard(b);
+//		std::cout << '\n';
+//	}
+//
+//
+//	enqueuedList.push_back(std::make_shared<Board>(start2State));
+//	generateAdmissibleHeuristic( enqueuedList[enqueuedList.size()-1] );
+//
+//	std::cout << "before push_heap: \n";
+//	for (auto& b : enqueuedList) {
+//		std::cout << b->getHash() << std::endl;
+//		std::cout << "f = " << b->getFCost() << std::endl;
+//		//printBoard(b);
+//		std::cout << '\n';
+//	}
+//
+//	std::push_heap(enqueuedList.begin(), enqueuedList.end());
+//
+//	std::cout << "after push_heap: \n";
+//	for (auto& b : enqueuedList) {
+//		std::cout << b->getHash() << std::endl;
+//		std::cout << "f = " << b->getFCost() << std::endl;
+//		//printBoard(b);
+//		std::cout << '\n';
+//	}
+//
+//
+//	for (int i = 0; i < 5; ++i) {
+//		enqueuedList.push_back(std::make_shared<Board>());
+//		generateAdmissibleHeuristic( enqueuedList[enqueuedList.size()-1] );
+//
+//		std::cout << "before push_heap: \n";
+//		for (auto& b : enqueuedList) {
+//			std::cout << b->getHash() << std::endl;
+//			std::cout << "f = " << b->getFCost() << std::endl;
+//			//printBoard(b);
+//			std::cout << '\n';
+//		}
+//
+//		std::push_heap(enqueuedList.begin(), enqueuedList.end());
+//
+//		std::cout << "after push_heap: \n";
+//		for (auto& b : enqueuedList) {
+//			std::cout << b->getHash() << std::endl;
+//			std::cout << "f = " << b->getFCost() << std::endl;
+//			//printBoard(b);
+//			std::cout << '\n';
+//		}
+//	}
+//
+//	std::pop_heap(enqueuedList.begin(), enqueuedList.end());
+//	enqueuedList.pop_back();
+//
+//	std::cout << "after pop_heap: \n";
+//	for (auto& b : enqueuedList) {
+//		std::cout << b->getHash() << std::endl;
+//		std::cout << "f = " << b->getFCost() << std::endl;
+//		//printBoard(b);
+//		std::cout << '\n';
+//	}
+//
+//	std::cout << "is enqueuedList.front > enqueuedList.back?\n" << (enqueuedList.front() > enqueuedList.back()) << std::endl;
+//
+//	std::make_heap(enqueuedList.begin(), enqueuedList.end());
+//
+//	std::cout << "\nafter make_heap: \n";
+//	for (auto& b : enqueuedList) {
+//		std::cout << b->getHash() << std::endl;
+//		std::cout << "f = " << b->getFCost() << std::endl;
+//		//printBoard(b);
+//		std::cout << '\n';
+//	}
+//
+//	std::cout << "is enqueuedList.front > enqueuedList.back?\n" << (enqueuedList.front() > enqueuedList.back()) << std::endl;
+//

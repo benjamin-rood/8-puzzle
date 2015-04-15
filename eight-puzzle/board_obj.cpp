@@ -23,6 +23,7 @@ Board::Board(void) { //  default constructor will initialise a randomised
       break;
     }
   hash = hashBoardState(boardState);
+//  std::cout << "created Board with hash:\t" << this->getHash() << std::endl;
 }
 
 Board::Board(const std::array<uint32_t, boardSize> boardState) {
@@ -35,6 +36,7 @@ Board::Board(const std::array<uint32_t, boardSize> boardState) {
     }
   }
   hash = hashBoardState(boardState);
+//  std::cout << "created Board with hash:\t" << this->getHash() << std::endl;
 }
 
 Board::Board(const Board &b) //  straight copy constructor
@@ -45,6 +47,7 @@ Board::Board(const Board &b) //  straight copy constructor
       moveHistory{b.moveHistory} {
 
   std::copy(std::begin(b), std::end(b), std::begin(boardState));
+		  
 }
 
 Board::Board(const Board &b, enum tileMove move) //  INTERNAL PRIVATE copy
@@ -80,11 +83,11 @@ Board::Board(const Board &b, enum tileMove move) //  INTERNAL PRIVATE copy
   moveHistory.push_back(move);
   ++pathlength;
   hash = hashBoardState(boardState);
-  std::cout << "created Board with hash:\t" << this->getHash() << std::endl;
+//  std::cout << "created Board with hash:\t" << this->getHash() << std::endl;
 }
 
 Board::~Board() {
-  std::cout << "destroying Board with hash:\t" << this->getHash() << std::endl;
+//	std::cout << "destroying Board with hash:\t" << this->getHash() << std::endl;
 }
 
 //  iterators for range functions used as [begin, end)
@@ -105,18 +108,7 @@ Board &Board::operator=(const Board &rhs) {
 }
 
 const bool Board::operator==(const Board &rhs) {
-  if (emptyTile != rhs.emptyTile)
-    return false;
-  if (pathlength != rhs.pathlength)
-    return false;
-  if (moveHistory != rhs.moveHistory)
-    return false;
-  int i = 0;
-  for (auto x : rhs)
-    if (x != boardState[i++])
-      return false;
-
-  return true;
+	return (hash == rhs.hash);
 }
 
 const bool Board::operator!=(const Board &rhs) { return !operator==(rhs); }
@@ -167,7 +159,7 @@ void Board::setHeuristic(const int32_t &hVal) { heuristic = hVal; }
 
 const uint32_t &Board::getHash(void) const { return hash; }
 
-const int Board::getFCost(void) const { return pathlength + heuristic; }
+const int32_t Board::getFCost(void) const { return pathlength + heuristic; }
 
 //  END INTERNAL CLASS METHODS
 
@@ -178,7 +170,7 @@ std::ostream &operator<<(std::ostream &os, const Board &B) {
   return os;
 }
 
-//  BEGING BOARD-FRIENDLY FUNCTIONS
+//  BEGIN BOARD-FRIENDLY FUNCTIONS
 
 std::stack<std::shared_ptr<Board>>
 spawnBoardMovesFrom(const std::shared_ptr<Board> B) {
@@ -410,9 +402,11 @@ bool testForGoalState(const std::shared_ptr<Board> B) {
 }
 
 bool testForGoalState(const Board &B) {
-  if (std::equal(std::begin(B.boardState), std::end(B.boardState),
-                 std::begin(goalState)))
-    return true;
+//  if (std::equal(std::begin(B.boardState), std::end(B.boardState),
+//                 std::begin(defaultState)))
+//    return true;
+	if (B.hash == 0)
+		return true;
   return false;
 }
 
@@ -427,6 +421,18 @@ const int32_t &getHeuristic(const std::shared_ptr<Board> B) {
 }
 
 const int32_t &getHeuristic(const Board &B) { return B.heuristic; }
+		  
+		  
+const int32_t f_CostOfState( const Board& B ) {
+	return B.getFCost();
+}
+
+
+const int32_t f_CostOfState( const std::shared_ptr<Board> B ) {
+  return f_CostOfState(*B);
+}
+
+//  END BOARD-FRIENDLY FUNCTIONS
 
 //	HASHING FUNCTIONALITY
 
@@ -472,16 +478,13 @@ hashBoardState(const std::array<uint32_t, boardSize> boardArray) {
   return permutation_id;
 }
 
-//  END BOARD-FRIENDLY FUNCTIONS
-
 const bool operator<(const std::shared_ptr<Board> &lhs,
                      const std::shared_ptr<Board> &rhs) {
   return operator<(*lhs, *rhs);
 }
 
 const bool operator<(const Board &lhs, const Board &rhs) {
-  return (getPathLength(lhs) + getHeuristic(lhs)) <
-         (getPathLength(rhs) + getHeuristic(rhs));
+  return f_CostOfState(lhs) > f_CostOfState(rhs);
 }
 
 const bool operator>(const std::shared_ptr<Board> &lhs,

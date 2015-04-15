@@ -11,12 +11,27 @@
 
 #include <vector>
 
-void insert( const std::vector<T>& stack, const T& obj ) {
-	std
+void insert( const std::vector<T>& priority_stack, const T& obj ) {
+	if ( stack.empty() )	{
+		stack.push_back(obj);
+		return;
+	}
+	//binary search to find pointer to location of <= nearest neighbour of obj being inserted
+	T* low = &stack.data();
+	T* high = &stack.data() + stack.size();
+	T* insert_position = &(stack.data() + stack.size())/2;	// initialise to mid-point
+	
+	while(1) {
+		if (*insert_position == obj) break;
+	}
 }
 
-T& top( const std::vector<T>& stack ) {
+T& top( const std::vector<T>& priority_stack ) {
 	return stack.back();
+}
+
+void pop( const std::vector<T>& priority_stack ) {
+	priority_stack.pop_back();
 }
 
 
