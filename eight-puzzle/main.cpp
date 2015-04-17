@@ -9,6 +9,7 @@
 #include "board_obj.h"
 #include <bitset>
 #include <stack>
+#include <queue>
 #include <set>
 
 const uint32_t domain_size = 362880;
@@ -21,184 +22,131 @@ void print_inBitSet( const std::bitset<domain_size>& set, const Board& B )	{
 	else std::cout << "NO\n";
 }
 
-int main(int argc, const char * argv[]) {
-	
-	// DEPTH-FIRST SEARCH:
-	
-	std::stack<std::shared_ptr<Board>> Q;
-	std::stack<std::shared_ptr<Board>> expandedStack;
-	std::bitset<domain_size> visitedList;			//	the same type gets used for both visited and strict expanded list.
-													//	a bitset is initialised by default with all bits set to 0 (false).
-	
-	std::shared_ptr<Board> start = std::make_shared<Board>( simpleState );
-	Q.push( start );
-	std::shared_ptr<Board>& B = start;
+void print_SUCCESS ( std::shared_ptr<Board>& B )	{
+	std::cout << "SUCCESS!\n\n";
 	printBoard( B );
-	
-	while (!( Q.empty() ))	{
-		
-		B = Q.top();
-		if ( testForGoalState(B) ) break;
-		expandedStack = spawnBoardMovesFrom( B );
-		Q.pop();	//	once expanded, get rid of B
-		
-		while (!( expandedStack.empty() )) {
-			auto& top = expandedStack.top();
-			Q.push( top );
-			expandedStack.pop();
-		}
-	}
-	
+	std::cout << std::endl;
+	std::cout << "Path Length = " << getPathLength(B) << std::endl;
 	std::string successPath = getMoveHistoryString( B );
-	
 	for ( auto& s : successPath )
 		std::cout << s << " > ";
-	std::cout << "GOAL\n";
-	
+	std::cout << "GOAL\n\n\n\n\n\n\n";
 }
 
+void print_FAIL ( void )	{
+	std::cout << "FAILED to find GOAL.\n\n\n\n\n";
+}
 
+int main(int argc, const char * argv[]) {
+	
+	
+	// PROGRESSIVE DEEPING SEARCH:
+	{
+		std::bitset<domain_size> visitedList;			//	the same type gets used for both visited and strict expanded list.
+														//	a bitset is initialised by default with all bits set to 0 (false).
+		
+		std::stack<std::shared_ptr<Board>> qStack;	//	LIFO Enqueued List!
+		std::stack<std::shared_ptr<Board>> expandedStack;
+		
+		uint32_t depth_stop = 1;
+		uint32_t depth_max = 60;
+		
+		while ( depth_stop != depth_max ) {
+			++depth_stop;
+			visitedList.reset();
+//			std::cout << "Begin >> Progressive Deepening Search:\tDepth = " << depth_stop-1 << "\n\n";
+			
+			std::shared_ptr<Board> start = std::make_shared<Board>( start4State );
+			qStack.push( start );
+			std::shared_ptr<Board>& B = start;
+			
+			
+			while (!( qStack.empty() ))	{
+				B = qStack.top();
+				qStack.pop();	//	once B retrieved from qStack, pop qStack.
+				visitedList.set( B->getHash() );	//	add B to visited list
+				
+				if ( testForGoalState(B) )	{
+					print_SUCCESS(B);
+					break;
+				}
+				
+//				printBoard( B );
+//				
+//				auto currentPath = std::make_shared<std::string>(getMoveHistoryString( B ));
+//				for ( auto& cp : *currentPath )
+//					std::cout << cp << " > ";
+//				std::cout << "\n\n";
+				
+				
+				expandedStack = spawnBoardMovesFrom( B );
+				
+				while (!( expandedStack.empty() ))	{
+					auto& top = expandedStack.top();
+					if (( visitedList[top->getHash()] == false ) && ( getPathLength(top) != depth_stop ))
+						qStack.push( top );
+					expandedStack.pop();
+				}
+			}
+			
+			if ( testForGoalState(B) )	break;
+//			else {
+//				std::cout << "Progressive Deepening Search -- goal not found.\n\n";
+//			}
+			
+			
+		}
+		
+		
+	}	//	end PDS.
+	
+	
+	// BREADTH-FIRST SEARCH:
+	{
+		 std::cout << "BREADTH-FIRST SEARCH\n\n";
+		 std::queue<std::shared_ptr<Board>> BreadthFirst_Q;	//	FIFO Enqueued List!
+		 std::stack<std::shared_ptr<Board>> expandedStack;
+		 std::bitset<domain_size> visitedList;			//	the same type gets used for both visited and strict expanded list.
+		 //	a bitset is initialised by default with all bits set to 0 (false).
+		 
+		 std::shared_ptr<Board> start = std::make_shared<Board>( start4State );
+		 BreadthFirst_Q.push( start );
+		 std::shared_ptr<Board>& B = start;
+		 
+		 
+		 while (!( BreadthFirst_Q.empty() ))	{
+			//std::cout << "Enqueued List size = " << BreadthFirst_Q.size() << std::endl;
+			B = BreadthFirst_Q.front();
+			BreadthFirst_Q.pop();
+			if ( testForGoalState(B) ) break;
 
-//	std::vector<int> v { 3, 12, 4, 11, 5, 9 };
-//
-//	std::sort(v.begin(), v.end(), std::less<int>());
-//
-//	std::cout << "v: ";
-//	for (auto i : v) std::cout << i << ' ';
-//	std::cout << '\n';
-//
-//	v.push_back(1);
-//
-//	std::cout << "v: ";
-//	for (auto i : v) std::cout << i << ' ';
-//	std::cout << '\n';
-//
-//	std::sort(v.begin(), v.end(), std::less<int>());
-//
-//	std::cout << "v: ";
-//	for (auto i : v) std::cout << i << ' ';
-//	std::cout << '\n';
-//
-//
-//
-//	// TESTING BOARD FUNCTIONALITY
-//	std::vector<std::shared_ptr<Board>> enqueuedList;
-//	std::bitset<domain_size> visitedList;			//	the same type gets used for both visited and strict expanded list.
-//													//	a bitset is initialised by default with all bits set to 0 (false).
-//
-//
-//	enqueuedList.push_back(std::make_shared<Board>(start4State));
-//	enqueuedList.push_back(std::make_shared<Board>(start1State));
-//	enqueuedList.push_back(std::make_shared<Board>(start3State));
-//
-//	std::cout << "\nBefore make_heap:\n";
-//	for (auto& b : enqueuedList) {
-//		generateAdmissibleHeuristic( b );
-//		std::cout << b->getHash() << std::endl;
-//		std::cout << "f = " << b->getFCost() << std::endl;
-//		//printBoard(b);
-//		std::cout << '\n';
-//	}
-//
-//	std::make_heap( enqueuedList.begin(), enqueuedList.end() );
-//
-//	std::cout << "\nAfter make_heap:\n";
-//	for (auto& b : enqueuedList) {
-//		std::cout << b->getHash() << std::endl;
-//		std::cout << "f = " << b->getFCost() << std::endl;
-//		//printBoard(b);
-//		std::cout << '\n';
-//	}
-//
-//	enqueuedList.push_back(std::make_shared<Board>(start5State));
-//	generateAdmissibleHeuristic( enqueuedList[enqueuedList.size()-1] );
-//
-//	std::cout << "before push_heap: \n";
-//	for (auto& b : enqueuedList) {
-//		std::cout << b->getHash() << std::endl;
-//		std::cout << "f = " << b->getFCost() << std::endl;
-//		//printBoard(b);
-//		std::cout << '\n';
-//	}
-//
-//	std::push_heap(enqueuedList.begin(), enqueuedList.end());
-//
-//	std::cout << "after push_heap: \n";
-//	for (auto& b : enqueuedList) {
-//		std::cout << b->getHash() << std::endl;
-//		std::cout << "f = " << b->getFCost() << std::endl;
-//		//printBoard(b);
-//		std::cout << '\n';
-//	}
-//
-//
-//	enqueuedList.push_back(std::make_shared<Board>(start2State));
-//	generateAdmissibleHeuristic( enqueuedList[enqueuedList.size()-1] );
-//
-//	std::cout << "before push_heap: \n";
-//	for (auto& b : enqueuedList) {
-//		std::cout << b->getHash() << std::endl;
-//		std::cout << "f = " << b->getFCost() << std::endl;
-//		//printBoard(b);
-//		std::cout << '\n';
-//	}
-//
-//	std::push_heap(enqueuedList.begin(), enqueuedList.end());
-//
-//	std::cout << "after push_heap: \n";
-//	for (auto& b : enqueuedList) {
-//		std::cout << b->getHash() << std::endl;
-//		std::cout << "f = " << b->getFCost() << std::endl;
-//		//printBoard(b);
-//		std::cout << '\n';
-//	}
-//
-//
-//	for (int i = 0; i < 5; ++i) {
-//		enqueuedList.push_back(std::make_shared<Board>());
-//		generateAdmissibleHeuristic( enqueuedList[enqueuedList.size()-1] );
-//
-//		std::cout << "before push_heap: \n";
-//		for (auto& b : enqueuedList) {
-//			std::cout << b->getHash() << std::endl;
-//			std::cout << "f = " << b->getFCost() << std::endl;
-//			//printBoard(b);
-//			std::cout << '\n';
-//		}
-//
-//		std::push_heap(enqueuedList.begin(), enqueuedList.end());
-//
-//		std::cout << "after push_heap: \n";
-//		for (auto& b : enqueuedList) {
-//			std::cout << b->getHash() << std::endl;
-//			std::cout << "f = " << b->getFCost() << std::endl;
-//			//printBoard(b);
-//			std::cout << '\n';
-//		}
-//	}
-//
-//	std::pop_heap(enqueuedList.begin(), enqueuedList.end());
-//	enqueuedList.pop_back();
-//
-//	std::cout << "after pop_heap: \n";
-//	for (auto& b : enqueuedList) {
-//		std::cout << b->getHash() << std::endl;
-//		std::cout << "f = " << b->getFCost() << std::endl;
-//		//printBoard(b);
-//		std::cout << '\n';
-//	}
-//
-//	std::cout << "is enqueuedList.front > enqueuedList.back?\n" << (enqueuedList.front() > enqueuedList.back()) << std::endl;
-//
-//	std::make_heap(enqueuedList.begin(), enqueuedList.end());
-//
-//	std::cout << "\nafter make_heap: \n";
-//	for (auto& b : enqueuedList) {
-//		std::cout << b->getHash() << std::endl;
-//		std::cout << "f = " << b->getFCost() << std::endl;
-//		//printBoard(b);
-//		std::cout << '\n';
-//	}
-//
-//	std::cout << "is enqueuedList.front > enqueuedList.back?\n" << (enqueuedList.front() > enqueuedList.back()) << std::endl;
-//
+			visitedList.set( B->getHash() );
+			expandedStack = spawnBoardMovesFrom( B );
+			
+			
+			while (!( expandedStack.empty() )) {
+				auto& top = expandedStack.top();
+				if ( visitedList[top->getHash()] == false )
+					BreadthFirst_Q.push( top );
+				expandedStack.pop();
+			}
+		 }
+		
+
+		 printBoard( B );
+		 std::string successPath = getMoveHistoryString( B );
+		 
+		 for ( auto& s : successPath )
+			std::cout << s << " > ";
+		 std::cout << "GOAL\n\n\n\n\n\n\n";
+		 
+		 // empty expandedStack for next use:
+		 if (!( expandedStack.empty() )) {
+			while (!( expandedStack.empty() ))
+		 expandedStack.pop();
+		 }
+		 //	reset visited list!
+		 visitedList.reset();
+	}
+}
+

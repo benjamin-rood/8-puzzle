@@ -30,8 +30,9 @@ const std::array<uint32_t, boardSize> start2State = {{ 1,6,8,3,4,2,7,5,0 }};
 const std::array<uint32_t, boardSize> start3State = {{ 4,8,1,3,0,2,6,7,5 }};
 const std::array<uint32_t, boardSize> start4State = {{ 8,7,6,5,4,3,2,1,0 }};
 const std::array<uint32_t, boardSize> start5State = {{ 1,2,3,8,0,4,7,6,5 }};
-const std::array<uint32_t, boardSize> simpleState = {{ 1,0,2,3,4,5,6,7,8 }};
-const std::array<uint32_t, boardSize> simpleState2 = {{ 1,0,2,3,5,4,6,7,8 }};
+const std::array<uint32_t, boardSize> simpleState = {{ 1,0,2,3,4,5,6,7,8 }};	// L > GOAL
+const std::array<uint32_t, boardSize> simpleState2 = {{ 3,1,2,6,4,5,0,7,8 }};	// U > U > GOAL
+const std::array<uint32_t, boardSize> simpleState3 = {{ 3,1,2,6,4,5,7,0,8 }};	// L > U > U > GOAL
 
 
 class Board {

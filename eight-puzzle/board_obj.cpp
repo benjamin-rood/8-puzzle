@@ -50,7 +50,7 @@ Board::Board(const Board &b) //  straight copy constructor
 		  
 }
 
-Board::Board(const Board &b, enum tileMove move) //  INTERNAL PRIVATE copy
+Board::Board(const Board &b, enum tileMove move) //  copy
                                                  //  constructor - copies board
                                                  //  then applies move.
     : emptyTile{b.emptyTile},
@@ -62,19 +62,15 @@ Board::Board(const Board &b, enum tileMove move) //  INTERNAL PRIVATE copy
   switch (move) {
   case UP:
     std::swap(boardState[emptyTile], boardState[emptyTile - 3]);
-    emptyTile -= 3;
     break;
   case LEFT:
     std::swap(boardState[emptyTile], boardState[emptyTile - 1]);
-    emptyTile -= 1;
     break;
   case DOWN:
     std::swap(boardState[emptyTile], boardState[emptyTile + 3]);
-    emptyTile += 3;
     break;
   case RIGHT:
     std::swap(boardState[emptyTile], boardState[emptyTile + 1]);
-    emptyTile += 1;
     break;
   default:
     break;
@@ -83,6 +79,12 @@ Board::Board(const Board &b, enum tileMove move) //  INTERNAL PRIVATE copy
   moveHistory.push_back(move);
   ++pathlength;
   hash = hashBoardState(boardState);
+  for (int i = 0; i < boardSize; ++i) {
+		if (boardState[i] == 0) {
+			emptyTile = i; //  record location of empty (0) tile.
+			break;
+		}
+  }
 //  std::cout << "created Board with hash:\t" << this->getHash() << std::endl;
 }
 
@@ -182,80 +184,81 @@ std::stack<std::shared_ptr<Board>> spawnBoardMovesFrom(const Board &B) {
 
   switch (B.emptyTile) {
   case TOP_LEFT:
-    if (B.okMove(DOWN))
-      BoardMoves.emplace(std::make_shared<Board>(B, DOWN));
-    if (B.okMove(RIGHT))
-      BoardMoves.emplace(std::make_shared<Board>(B, RIGHT));
+	if (B.okMove(RIGHT))
+	 BoardMoves.push(std::make_shared<Board>(B, RIGHT));
+	if (B.okMove(DOWN))
+	 BoardMoves.push(std::make_shared<Board>(B, DOWN));
     break;
 
   case TOP_MID:
-    if (B.okMove(LEFT))
-      BoardMoves.emplace(std::make_shared<Board>(B, LEFT));
-    if (B.okMove(DOWN))
-      BoardMoves.emplace(std::make_shared<Board>(B, DOWN));
     if (B.okMove(RIGHT))
-      BoardMoves.emplace(std::make_shared<Board>(B, RIGHT));
+      BoardMoves.push(std::make_shared<Board>(B, RIGHT));
+    if (B.okMove(DOWN))
+      BoardMoves.push(std::make_shared<Board>(B, DOWN));
+    if (B.okMove(LEFT))
+      BoardMoves.push(std::make_shared<Board>(B, LEFT));
     break;
 
   case TOP_RIGHT:
-    if (B.okMove(LEFT))
-      BoardMoves.emplace(std::make_shared<Board>(B, LEFT));
     if (B.okMove(DOWN))
-      BoardMoves.emplace(std::make_shared<Board>(B, DOWN));
+      BoardMoves.push(std::make_shared<Board>(B, DOWN));
+    if (B.okMove(LEFT))
+      BoardMoves.push(std::make_shared<Board>(B, LEFT));
     break;
 
   case CENTER_LEFT:
-    if (B.okMove(UP))
-      BoardMoves.emplace(std::make_shared<Board>(B, UP));
-    if (B.okMove(DOWN))
-      BoardMoves.emplace(std::make_shared<Board>(B, DOWN));
-    if (B.okMove(RIGHT))
-      BoardMoves.emplace(std::make_shared<Board>(B, RIGHT));
+	if (B.okMove(UP))
+	  BoardMoves.push(std::make_shared<Board>(B, UP));
+	if (B.okMove(RIGHT))
+	  BoardMoves.push(std::make_shared<Board>(B, RIGHT));
+	if (B.okMove(DOWN))
+	  BoardMoves.push(std::make_shared<Board>(B, DOWN));
     break;
 
   case CENTER_MID:
     if (B.okMove(UP))
-      BoardMoves.emplace(std::make_shared<Board>(B, UP));
-    if (B.okMove(LEFT))
-      BoardMoves.emplace(std::make_shared<Board>(B, LEFT));
-    if (B.okMove(DOWN))
-      BoardMoves.emplace(std::make_shared<Board>(B, DOWN));
+      BoardMoves.push(std::make_shared<Board>(B, UP));
     if (B.okMove(RIGHT))
-      BoardMoves.emplace(std::make_shared<Board>(B, RIGHT));
+      BoardMoves.push(std::make_shared<Board>(B, RIGHT));
+    if (B.okMove(DOWN))
+      BoardMoves.push(std::make_shared<Board>(B, DOWN));
+    if (B.okMove(LEFT))
+      BoardMoves.push(std::make_shared<Board>(B, LEFT));
     break;
 
   case CENTER_RIGHT:
-    if (B.okMove(UP))
-      BoardMoves.emplace(std::make_shared<Board>(B, UP));
-    if (B.okMove(LEFT))
-      BoardMoves.emplace(std::make_shared<Board>(B, LEFT));
-    if (B.okMove(DOWN))
-      BoardMoves.emplace(std::make_shared<Board>(B, DOWN));
+	if (B.okMove(UP))
+	  BoardMoves.push(std::make_shared<Board>(B, UP));
+	if (B.okMove(DOWN))
+	  BoardMoves.push(std::make_shared<Board>(B, DOWN));
+	if (B.okMove(LEFT))
+	  BoardMoves.push(std::make_shared<Board>(B, LEFT));
     break;
 
   case BOT_LEFT:
     if (B.okMove(UP))
-      BoardMoves.emplace(std::make_shared<Board>(B, UP));
-    if (B.okMove(RIGHT))
-      BoardMoves.emplace(std::make_shared<Board>(B, RIGHT));
+		BoardMoves.push(std::make_shared<Board>(B, UP));
+	if (B.okMove(RIGHT))
+	  BoardMoves.push(std::make_shared<Board>(B, RIGHT));
     break;
 
   case BOT_MID:
     if (B.okMove(UP))
-      BoardMoves.emplace(std::make_shared<Board>(B, UP));
-    if (B.okMove(LEFT))
-      BoardMoves.emplace(std::make_shared<Board>(B, LEFT));
-    if (B.okMove(RIGHT))
-      BoardMoves.emplace(std::make_shared<Board>(B, RIGHT));
+      BoardMoves.push(std::make_shared<Board>(B, UP));
+	if (B.okMove(RIGHT))
+	  BoardMoves.push(std::make_shared<Board>(B, RIGHT));
+	if (B.okMove(LEFT))
+	  BoardMoves.push(std::make_shared<Board>(B, LEFT));
     break;
 
   case BOT_RIGHT:
     if (B.okMove(UP))
-      BoardMoves.emplace(std::make_shared<Board>(B, UP));
+	  BoardMoves.push(std::make_shared<Board>(B, UP));
     if (B.okMove(LEFT))
-      BoardMoves.emplace(std::make_shared<Board>(B, LEFT));
+      BoardMoves.push(std::make_shared<Board>(B, LEFT));
     break;
   default:
+	std::cout << "unknown case presented to switch statement!\n";
     break;
   }
 
