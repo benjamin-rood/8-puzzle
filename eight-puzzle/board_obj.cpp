@@ -60,31 +60,28 @@ Board::Board(const Board &b, enum tileMove move) //  copy
   std::copy(std::begin(b), std::end(b), std::begin(boardState));
 
   switch (move) {
-  case UP:
-    std::swap(boardState[emptyTile], boardState[emptyTile - 3]);
-    break;
-  case LEFT:
-    std::swap(boardState[emptyTile], boardState[emptyTile - 1]);
-    break;
-  case DOWN:
-    std::swap(boardState[emptyTile], boardState[emptyTile + 3]);
-    break;
-  case RIGHT:
-    std::swap(boardState[emptyTile], boardState[emptyTile + 1]);
-    break;
-  default:
-    break;
+	  case UP:
+		  std::swap(boardState[emptyTile], boardState[emptyTile - 3]);
+		  emptyTile -= 3;
+		  break;
+	  case LEFT:
+		  std::swap(boardState[emptyTile], boardState[emptyTile - 1]);
+		  emptyTile -= 1;
+		  break;
+	  case DOWN:
+		  std::swap(boardState[emptyTile], boardState[emptyTile + 3]);
+		  emptyTile += 3;
+		  break;
+	  case RIGHT:
+		  std::swap(boardState[emptyTile], boardState[emptyTile + 1]);
+		  emptyTile += 1;
+		  break;
+	  default:
+		  break;
   }
-
   moveHistory.push_back(move);
   ++pathlength;
   hash = hashBoardState(boardState);
-  for (int i = 0; i < boardSize; ++i) {
-		if (boardState[i] == 0) {
-			emptyTile = i; //  record location of empty (0) tile.
-			break;
-		}
-  }
 //  std::cout << "created Board with hash:\t" << this->getHash() << std::endl;
 }
 
