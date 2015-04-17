@@ -24,19 +24,22 @@ enum tileMove { UP = 0, LEFT = 1, DOWN = 2, RIGHT = 3 };
 
 const int boardSize = 9;
 
-const std::array<uint32_t, boardSize> goalState = {{ 0,1,2,3,4,5,6,7,8 }};
+const std::array<uint32_t, boardSize> defaultState = {{ 0,1,2,3,4,5,6,7,8 }};	//	same as Goal
 const std::array<uint32_t, boardSize> start1State = {{ 0,4,2,1,5,8,3,6,7 }};
 const std::array<uint32_t, boardSize> start2State = {{ 1,6,8,3,4,2,7,5,0 }};
 const std::array<uint32_t, boardSize> start3State = {{ 4,8,1,3,0,2,6,7,5 }};
 const std::array<uint32_t, boardSize> start4State = {{ 8,7,6,5,4,3,2,1,0 }};
 const std::array<uint32_t, boardSize> start5State = {{ 1,2,3,8,0,4,7,6,5 }};
+const std::array<uint32_t, boardSize> simpleState = {{ 1,0,2,3,4,5,6,7,8 }};	// L > GOAL
+const std::array<uint32_t, boardSize> simpleState2 = {{ 3,1,2,6,4,5,0,7,8 }};	// U > U > GOAL
+const std::array<uint32_t, boardSize> simpleState3 = {{ 3,1,2,6,4,5,7,0,8 }};	// L > U > U > GOAL
 
 
 class Board {
 private:
-    std::array<uint32_t, boardSize> boardState = {{ 0,1,2,3,4,5,6,7,8 }} ;  //  stores a 1D representation of the eight-puzzle tile Board
-    uint32_t emptyTile = TOP_LEFT;                              //  location of empty tile (0 tile) in array. It's easier to not have to search for this ever single time, plus, we get a very readable name to use!
-    int32_t pathlength = 0;                                    //  current path length from initial (start) boardState to goal boardState of 012345678
+    std::array<uint32_t, boardSize> boardState = defaultState;	//  stores a 1-D representation of the eight-puzzle tile Board. On construction gets randomised using std::shuffle.
+    uint32_t emptyTile = TOP_LEFT;                              //  location of empty tile (0 tile) in array. It's easier to not have to search for this every single time, plus, we get a very readable name to use!
+    int32_t pathlength = 0;										//  current path length from initial (start) boardState to goal boardState of 012345678
 	int32_t heuristic = 0;										//	initialised to 0
 	uint32_t hash = 0;											//	initialised to 0 as init boardState = goalState.
 	std::vector<enum tileMove> moveHistory;                     //  stores a record of tile moves (e.g. U,U,D,L,R,D etc)
@@ -48,21 +51,23 @@ private:
     
     
 public:
-    explicit Board ( void );     //  default constructor will initialise a randomised boardState array.
-    Board ( const std::array<uint32_t, boardSize> boardState ); //  construct with specific boardState. Only accepts valid boardState array instances.
-    Board ( const Board& B );    //  straight copy constructor
-	Board( const Board& B, enum tileMove move );                //  INTERNAL copy constructor - copies from another Board then applies move.
-	~Board ( void );             //  no need for anything but the (system-provided) shallow destructor.
+    explicit Board ( void );									//  default constructor will initialise a randomised boardState array.
+    Board ( const std::array<uint32_t, boardSize> boardState );	//  construct with specific boardState. Only accepts valid boardState array instances.
+    Board ( const Board& B );									//  straight copy constructor
+	Board ( const Board& B, enum tileMove move );               //  copy constructor - copies from another Board then applies move.
+	Board ( Board&& B ) = default;								//	explicitly use default move constructor
+	~Board ( void );											//  no need for anything but the (system-provided) shallow destructor.
     
     //  iterators for range functions used as [begin, end)
     const uint32_t* begin ( void ) const;
     const uint32_t* end ( void ) const;
     
-    Board& operator= ( const Board& rhs );  //  assignment operator.
+    Board& operator= ( const Board& rhs );					//  copy assignment operator.
+	Board& operator= ( Board&& rhs ) = default;				//	explicitly use default move assignment operator
     
     const bool operator== ( const Board& rhs );             //  obj comparison
     const bool operator!= ( const Board& rhs );             //  obj comparison
-    
+	
     const uint32_t& operator[] ( const int index ) const;   //  boardState index position access
     uint32_t& operator[] ( const int index );               //  boardState index position assignment
     
@@ -71,7 +76,7 @@ public:
 	void setHeuristic ( const int32_t& hVal );
 	
 	const uint32_t& getHash ( void ) const;
-	const int getFCost ( void ) const;
+	const int32_t getFCost ( void ) const;
 	
 	
     friend std::stack<std::shared_ptr<Board>> spawnBoardMovesFrom ( const Board& B );    //  spawns a vector of new Boards based on possible moves from current boardState. Equivalent to STATE EXPANSION! :-)
@@ -101,9 +106,14 @@ public:
 	friend bool testForGoalState ( const Board& B );
 	friend bool testForGoalState ( const std::shared_ptr<Board> B );
 	
-	friend const int& getPathLength ( const Board& B );
-	friend const int& getPathLength ( const std::shared_ptr<Board> B );
+	friend const int32_t& getPathLength ( const Board& B );
+	friend const int32_t& getPathLength ( const std::shared_ptr<Board> B );
 
+	friend const int32_t& getHeuristic ( const Board& B );
+	friend const int32_t& getHeuristic ( const std::shared_ptr<Board> B );
+
+	friend const int32_t f_CostOfState( const Board& B );
+	friend const int32_t f_CostOfState( const std::shared_ptr<Board> B );
 };
 
 std::ostream& operator<< ( std::ostream& os, const Board& B );
@@ -116,6 +126,11 @@ const uint32_t hashBoardState ( const Board& board );
 const uint32_t hashBoardState ( const std::shared_ptr<Board> B );
 const uint32_t hashBoardState ( const std::array<uint32_t, boardSize> boardArray );
 
+
+const bool operator< ( const Board& lhs, const Board& rhs );
+const bool operator< ( const std::shared_ptr<Board>& lhs, const std::shared_ptr<Board>& rhs );
+const bool operator> ( const Board& lhs, const Board& rhs );
+const bool operator> ( const std::shared_ptr<Board>& lhs, const std::shared_ptr<Board>& rhs );
 
 
 

@@ -23,6 +23,7 @@ Board::Board(void) { //  default constructor will initialise a randomised
       break;
     }
   hash = hashBoardState(boardState);
+//  std::cout << "created Board with hash:\t" << this->getHash() << std::endl;
 }
 
 Board::Board(const std::array<uint32_t, boardSize> boardState) {
@@ -35,6 +36,7 @@ Board::Board(const std::array<uint32_t, boardSize> boardState) {
     }
   }
   hash = hashBoardState(boardState);
+//  std::cout << "created Board with hash:\t" << this->getHash() << std::endl;
 }
 
 Board::Board(const Board &b) //  straight copy constructor
@@ -45,9 +47,10 @@ Board::Board(const Board &b) //  straight copy constructor
       moveHistory{b.moveHistory} {
 
   std::copy(std::begin(b), std::end(b), std::begin(boardState));
+		  
 }
 
-Board::Board(const Board &b, enum tileMove move) //  INTERNAL PRIVATE copy
+Board::Board(const Board &b, enum tileMove move) //  copy
                                                  //  constructor - copies board
                                                  //  then applies move.
     : emptyTile{b.emptyTile},
@@ -59,19 +62,15 @@ Board::Board(const Board &b, enum tileMove move) //  INTERNAL PRIVATE copy
   switch (move) {
   case UP:
     std::swap(boardState[emptyTile], boardState[emptyTile - 3]);
-    emptyTile -= 3;
     break;
   case LEFT:
     std::swap(boardState[emptyTile], boardState[emptyTile - 1]);
-    emptyTile -= 1;
     break;
   case DOWN:
     std::swap(boardState[emptyTile], boardState[emptyTile + 3]);
-    emptyTile += 3;
     break;
   case RIGHT:
     std::swap(boardState[emptyTile], boardState[emptyTile + 1]);
-    emptyTile += 1;
     break;
   default:
     break;
@@ -80,10 +79,17 @@ Board::Board(const Board &b, enum tileMove move) //  INTERNAL PRIVATE copy
   moveHistory.push_back(move);
   ++pathlength;
   hash = hashBoardState(boardState);
+  for (int i = 0; i < boardSize; ++i) {
+		if (boardState[i] == 0) {
+			emptyTile = i; //  record location of empty (0) tile.
+			break;
+		}
+  }
+//  std::cout << "created Board with hash:\t" << this->getHash() << std::endl;
 }
 
 Board::~Board() {
-  std::cout << "destroying Board with state:\t" << *this << std::endl;
+//	std::cout << "destroying Board with hash:\t" << this->getHash() << std::endl;
 }
 
 //  iterators for range functions used as [begin, end)
@@ -104,18 +110,7 @@ Board &Board::operator=(const Board &rhs) {
 }
 
 const bool Board::operator==(const Board &rhs) {
-  if (emptyTile != rhs.emptyTile)
-    return false;
-  if (pathlength != rhs.pathlength)
-    return false;
-  if (moveHistory != rhs.moveHistory)
-    return false;
-  int i = 0;
-  for (auto x : rhs)
-    if (x != boardState[i++])
-      return false;
-
-  return true;
+	return (hash == rhs.hash);
 }
 
 const bool Board::operator!=(const Board &rhs) { return !operator==(rhs); }
@@ -162,11 +157,11 @@ std::ostream &Board::toStream(std::ostream &os) const {
   return os;
 }
 
-void Board::setHeuristic(const int32_t& hVal) { heuristic = hVal; }
+void Board::setHeuristic(const int32_t &hVal) { heuristic = hVal; }
 
 const uint32_t &Board::getHash(void) const { return hash; }
 
-const int Board::getFCost(void) const { return pathlength + heuristic; }
+const int32_t Board::getFCost(void) const { return pathlength + heuristic; }
 
 //  END INTERNAL CLASS METHODS
 
@@ -177,7 +172,7 @@ std::ostream &operator<<(std::ostream &os, const Board &B) {
   return os;
 }
 
-//  BEGING BOARD-FRIENDLY FUNCTIONS
+//  BEGIN BOARD-FRIENDLY FUNCTIONS
 
 std::stack<std::shared_ptr<Board>>
 spawnBoardMovesFrom(const std::shared_ptr<Board> B) {
@@ -189,80 +184,81 @@ std::stack<std::shared_ptr<Board>> spawnBoardMovesFrom(const Board &B) {
 
   switch (B.emptyTile) {
   case TOP_LEFT:
-    if (B.okMove(DOWN))
-      BoardMoves.emplace(std::make_shared<Board>(B, DOWN));
-    if (B.okMove(RIGHT))
-      BoardMoves.emplace(std::make_shared<Board>(B, RIGHT));
+	if (B.okMove(RIGHT))
+	 BoardMoves.push(std::make_shared<Board>(B, RIGHT));
+	if (B.okMove(DOWN))
+	 BoardMoves.push(std::make_shared<Board>(B, DOWN));
     break;
 
   case TOP_MID:
-    if (B.okMove(LEFT))
-      BoardMoves.emplace(std::make_shared<Board>(B, LEFT));
-    if (B.okMove(DOWN))
-      BoardMoves.emplace(std::make_shared<Board>(B, DOWN));
     if (B.okMove(RIGHT))
-      BoardMoves.emplace(std::make_shared<Board>(B, RIGHT));
+      BoardMoves.push(std::make_shared<Board>(B, RIGHT));
+    if (B.okMove(DOWN))
+      BoardMoves.push(std::make_shared<Board>(B, DOWN));
+    if (B.okMove(LEFT))
+      BoardMoves.push(std::make_shared<Board>(B, LEFT));
     break;
 
   case TOP_RIGHT:
-    if (B.okMove(LEFT))
-      BoardMoves.emplace(std::make_shared<Board>(B, LEFT));
     if (B.okMove(DOWN))
-      BoardMoves.emplace(std::make_shared<Board>(B, DOWN));
+      BoardMoves.push(std::make_shared<Board>(B, DOWN));
+    if (B.okMove(LEFT))
+      BoardMoves.push(std::make_shared<Board>(B, LEFT));
     break;
 
   case CENTER_LEFT:
-    if (B.okMove(UP))
-      BoardMoves.emplace(std::make_shared<Board>(B, UP));
-    if (B.okMove(DOWN))
-      BoardMoves.emplace(std::make_shared<Board>(B, DOWN));
-    if (B.okMove(RIGHT))
-      BoardMoves.emplace(std::make_shared<Board>(B, RIGHT));
+	if (B.okMove(UP))
+	  BoardMoves.push(std::make_shared<Board>(B, UP));
+	if (B.okMove(RIGHT))
+	  BoardMoves.push(std::make_shared<Board>(B, RIGHT));
+	if (B.okMove(DOWN))
+	  BoardMoves.push(std::make_shared<Board>(B, DOWN));
     break;
 
   case CENTER_MID:
     if (B.okMove(UP))
-      BoardMoves.emplace(std::make_shared<Board>(B, UP));
-    if (B.okMove(LEFT))
-      BoardMoves.emplace(std::make_shared<Board>(B, LEFT));
-    if (B.okMove(DOWN))
-      BoardMoves.emplace(std::make_shared<Board>(B, DOWN));
+      BoardMoves.push(std::make_shared<Board>(B, UP));
     if (B.okMove(RIGHT))
-      BoardMoves.emplace(std::make_shared<Board>(B, RIGHT));
+      BoardMoves.push(std::make_shared<Board>(B, RIGHT));
+    if (B.okMove(DOWN))
+      BoardMoves.push(std::make_shared<Board>(B, DOWN));
+    if (B.okMove(LEFT))
+      BoardMoves.push(std::make_shared<Board>(B, LEFT));
     break;
 
   case CENTER_RIGHT:
-    if (B.okMove(UP))
-      BoardMoves.emplace(std::make_shared<Board>(B, UP));
-    if (B.okMove(LEFT))
-      BoardMoves.emplace(std::make_shared<Board>(B, LEFT));
-    if (B.okMove(DOWN))
-      BoardMoves.emplace(std::make_shared<Board>(B, DOWN));
+	if (B.okMove(UP))
+	  BoardMoves.push(std::make_shared<Board>(B, UP));
+	if (B.okMove(DOWN))
+	  BoardMoves.push(std::make_shared<Board>(B, DOWN));
+	if (B.okMove(LEFT))
+	  BoardMoves.push(std::make_shared<Board>(B, LEFT));
     break;
 
   case BOT_LEFT:
     if (B.okMove(UP))
-      BoardMoves.emplace(std::make_shared<Board>(B, UP));
-    if (B.okMove(RIGHT))
-      BoardMoves.emplace(std::make_shared<Board>(B, RIGHT));
+		BoardMoves.push(std::make_shared<Board>(B, UP));
+	if (B.okMove(RIGHT))
+	  BoardMoves.push(std::make_shared<Board>(B, RIGHT));
     break;
 
   case BOT_MID:
     if (B.okMove(UP))
-      BoardMoves.emplace(std::make_shared<Board>(B, UP));
-    if (B.okMove(LEFT))
-      BoardMoves.emplace(std::make_shared<Board>(B, LEFT));
-    if (B.okMove(RIGHT))
-      BoardMoves.emplace(std::make_shared<Board>(B, RIGHT));
+      BoardMoves.push(std::make_shared<Board>(B, UP));
+	if (B.okMove(RIGHT))
+	  BoardMoves.push(std::make_shared<Board>(B, RIGHT));
+	if (B.okMove(LEFT))
+	  BoardMoves.push(std::make_shared<Board>(B, LEFT));
     break;
 
   case BOT_RIGHT:
     if (B.okMove(UP))
-      BoardMoves.emplace(std::make_shared<Board>(B, UP));
+	  BoardMoves.push(std::make_shared<Board>(B, UP));
     if (B.okMove(LEFT))
-      BoardMoves.emplace(std::make_shared<Board>(B, LEFT));
+      BoardMoves.push(std::make_shared<Board>(B, LEFT));
     break;
   default:
+	std::cout << "unknown case presented to switch statement!\n";
     break;
   }
 
@@ -345,19 +341,21 @@ std::string getMoveHistoryString(const Board &B) {
   return mhs;
 }
 
-const std::vector<enum tileMove>& getMoveHistory ( const std::shared_ptr<Board> B ) {
-	return getMoveHistory( *B );
+const std::vector<enum tileMove> &
+getMoveHistory(const std::shared_ptr<Board> B) {
+  return getMoveHistory(*B);
 }
 
-const std::vector<enum tileMove>& getMoveHistory(const Board &B) {
+const std::vector<enum tileMove> &getMoveHistory(const Board &B) {
   return B.moveHistory;
 }
 
-std::shared_ptr<Board> forceMove ( const std::shared_ptr<Board> B, enum tileMove& move ) {
-	return std::make_shared<Board>( forceMove( *B, move ) );
+std::shared_ptr<Board> forceMove(const std::shared_ptr<Board> B,
+                                 enum tileMove &move) {
+  return std::make_shared<Board>(forceMove(*B, move));
 }
 
-Board forceMove(const Board &B, enum tileMove& move) {
+Board forceMove(const Board &B, enum tileMove &move) {
 
   Board newBoard(B);
   std::copy(std::begin(B), std::end(B), std::begin(newBoard.boardState));
@@ -391,34 +389,53 @@ Board forceMove(const Board &B, enum tileMove& move) {
 
   newBoard.moveHistory.push_back(move);
   ++newBoard.pathlength;
-	newBoard.hash = hashBoardState( newBoard );
+  newBoard.hash = hashBoardState(newBoard);
 
   return newBoard;
 }
 
-const std::array<uint32_t, 9>& getState ( const std::shared_ptr<Board> B ) {
-	return getState( *B );
+const std::array<uint32_t, 9> &getState(const std::shared_ptr<Board> B) {
+  return getState(*B);
 }
 
-const std::array<uint32_t, 9>& getState(const Board &B) { return B.boardState; }
+const std::array<uint32_t, 9> &getState(const Board &B) { return B.boardState; }
 
-bool testForGoalState ( const std::shared_ptr<Board> B ) {
-	return testForGoalState( *B );
+bool testForGoalState(const std::shared_ptr<Board> B) {
+  return testForGoalState(*B);
 }
-
 
 bool testForGoalState(const Board &B) {
-  if (std::equal(std::begin(B.boardState), std::end(B.boardState),
-                 std::begin(goalState)))
-    return true;
+//  if (std::equal(std::begin(B.boardState), std::end(B.boardState),
+//                 std::begin(defaultState)))
+//    return true;
+	if (B.hash == 0)
+		return true;
   return false;
 }
 
-const int& getPathLength(const std::shared_ptr<Board> B) {
+const int &getPathLength(const std::shared_ptr<Board> B) {
   return getPathLength(*B);
 }
 
-const int& getPathLength(const Board &B) { return B.pathlength; }
+const int &getPathLength(const Board &B) { return B.pathlength; }
+
+const int32_t &getHeuristic(const std::shared_ptr<Board> B) {
+  return getHeuristic(*B);
+}
+
+const int32_t &getHeuristic(const Board &B) { return B.heuristic; }
+		  
+		  
+const int32_t f_CostOfState( const Board& B ) {
+	return B.getFCost();
+}
+
+
+const int32_t f_CostOfState( const std::shared_ptr<Board> B ) {
+  return f_CostOfState(*B);
+}
+
+//  END BOARD-FRIENDLY FUNCTIONS
 
 //	HASHING FUNCTIONALITY
 
@@ -428,12 +445,12 @@ int factorial(int n) {
 }
 
 const uint32_t hashBoardState(const Board &board) {
-	std::array<uint32_t, boardSize> boardArray = getState(board);
-	return hashBoardState(boardArray);
+  std::array<uint32_t, boardSize> boardArray = getState(board);
+  return hashBoardState(boardArray);
 }
 
 const uint32_t hashBoardState(const std::shared_ptr<Board> B) {
-	return hashBoardState(*B);
+  return hashBoardState(*B);
 }
 
 const uint32_t
@@ -464,6 +481,22 @@ hashBoardState(const std::array<uint32_t, boardSize> boardArray) {
   return permutation_id;
 }
 
-//  END BOARD-FRIENDLY FUNCTIONS
+const bool operator<(const std::shared_ptr<Board> &lhs,
+                     const std::shared_ptr<Board> &rhs) {
+  return operator<(*lhs, *rhs);
+}
+
+const bool operator<(const Board &lhs, const Board &rhs) {
+  return f_CostOfState(lhs) > f_CostOfState(rhs);
+}
+
+const bool operator>(const std::shared_ptr<Board> &lhs,
+                     const std::shared_ptr<Board> &rhs) {
+  return !operator<(*lhs, *rhs);
+}
+
+const bool operator>(const Board &lhs, const Board &rhs) {
+  return !operator<(lhs, rhs);
+}
 
 //  END EXTERNAL BOARD FUNCTIONS
