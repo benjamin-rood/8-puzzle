@@ -15,6 +15,8 @@
 #include <stack>
 #include <random>
 
+enum heuristicFunction { misplacedTiles, manhattanDistance };
+
 
 enum tilePosition { TOP_LEFT = 0, TOP_MID = 1, TOP_RIGHT = 2,
     CENTER_LEFT = 3, CENTER_MID = 4, CENTER_RIGHT = 5,

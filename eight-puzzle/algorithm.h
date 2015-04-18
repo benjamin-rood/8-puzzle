@@ -1,34 +1,32 @@
-#include <set>
 #include <stack>
-#include <deque>
 #include <ctime>
 #include <string>
-#include <iostream>
+#include "board_obj.h"
 #include <algorithm>
-#include <cstdlib>
-#include <set>
-#include <unordered_set>
-#include <unordered_map>
-#include <deque>
+#include <bitset>
 #include <queue>
 
-#include "puzzle.h"
+const uint32_t domain_size = 362880;
+const heuristicFunction HEURISTIC_FUNCTION = manhattanDistance;
 
+//	a tester function to do a print the status of flag
+void print_inBitSet( const std::bitset<domain_size>& set, const Board& B );
+void print_SUCCESS ( std::shared_ptr<Board>& B, size_t queueSize, uint32_t numExpansions );
+void print_FAIL ( void );
 
-const heuristicFunction HEURISTIC_FUNCTION=manhattanDistance;
 
 
 //Progressive Deepening Seach with Visited List
-string PDS_Visited_List(string const initialState, string const goalState, int &numOfStateExpansions, int& maxQLength, float &actualRunningTime, int ultimateMaxDepth);
+std::string PDS_Visited_List(std::string const initialState, std::string const goalState, int &numOfStateExpansions, int& maxQLength, float &actualRunningTime, int ultimateMaxDepth);
 
 //Best-First Search with Visited List
-string bestFirstSearch_Visited_List(string const initialState, string const goalState, int &numOfStateExpansions, int& maxQLength, float &actualRunningTime);
+std::string bestFirstSearch_Visited_List(std::string const initialState, std::string const goalState, int &numOfStateExpansions, int& maxQLength, float &actualRunningTime);
 
 //Uniform Cost Search with Expanded List
-string uniformCost_Exp_List(string const initialState, string const goalState, int &numOfStateExpansions, int& maxQLength, float &actualRunningTime);
+std::string uniformCost_Exp_List(std::string const initialState, std::string const goalState, int &numOfStateExpansions, int& maxQLength, float &actualRunningTime);
 
 //A* Search
-string aStar(string const initialState, string const goalState, int &numOfStateExpansions, int& maxQLength, float &actualRunningTime, heuristicFunction heuristic);
+std::string aStar(std::string const initialState, std::string const goalState, int &numOfStateExpansions, int& maxQLength, float &actualRunningTime, heuristicFunction heuristic);
 
 //A* using the Strict Expanded List
-string aStar_Exp_List(string const initialState, string const goalState, int &numOfStateExpansions, int& maxQLength, float &actualRunningTime, heuristicFunction heuristic);
+std::string aStar_Exp_List(std::string const initialState, std::string const goalState, int &numOfStateExpansions, int& maxQLength, float &actualRunningTime, heuristicFunction heuristic);
