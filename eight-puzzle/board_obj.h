@@ -15,6 +15,9 @@
 #include <stack>
 #include <random>
 
+typedef uint32_t hash_t;
+typedef int32_t fCost_t;
+
 enum heuristicFunction { misplacedTiles, manhattanDistance };
 
 
@@ -42,8 +45,8 @@ private:
     std::array<uint32_t, boardSize> boardState = defaultState;	//  stores a 1-D representation of the eight-puzzle tile Board. On construction gets randomised using std::shuffle.
     uint32_t emptyTile = TOP_LEFT;                              //  location of empty tile (0 tile) in array. It's easier to not have to search for this every single time, plus, we get a very readable name to use!
     int32_t pathlength = 0;										//  current path length from initial (start) boardState to goal boardState of 012345678
-	int32_t heuristic = 0;										//	initialised to 0
-	uint32_t hash = 0;											//	initialised to 0 as init boardState = goalState.
+	fCost_t heuristic = 0;										//	initialised to 0
+	hash_t hash = 0;											//	initialised to 0 as init boardState = goalState.
 	std::vector<enum tileMove> moveHistory;                     //  stores a record of tile moves (e.g. U,U,D,L,R,D etc)
 	
 	
@@ -80,7 +83,6 @@ public:
 	const uint32_t& getHash ( void ) const;
 	const int32_t getFCost ( void ) const;
 	
-	
     friend std::stack<std::shared_ptr<Board>> spawnBoardMovesFrom ( const Board& B );    //  spawns a vector of new Boards based on possible moves from current boardState. Equivalent to STATE EXPANSION! :-)
 	friend std::stack<std::shared_ptr<Board>> spawnBoardMovesFrom ( const std::shared_ptr<Board> B );    //  takes a shared_ptr!
 	
@@ -91,8 +93,10 @@ public:
 	friend void printLastMove ( const Board& B );
 	friend void printLastMove ( const std::shared_ptr<Board> B );
 	
-	friend void generateAdmissibleHeuristic ( Board& B );
-	friend void generateAdmissibleHeuristic ( std::shared_ptr<Board> B );
+	friend void generateManhattanHeuristic ( Board& B );
+	friend void generateManhattanHeuristic ( std::shared_ptr<Board> B );
+	
+	friend void generateMisplacedTilesHeuristic ( Board& B );
 	
 	friend std::string getMoveHistoryString ( const Board& B );
 	friend std::string getMoveHistoryString ( const std::shared_ptr<Board> B );

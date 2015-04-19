@@ -23,7 +23,6 @@ Board::Board(void) { //  default constructor will initialise a randomised
       break;
     }
   hash = hashBoardState(boardState);
-  //  std::cout << "created Board with hash:\t" << this->getHash() << std::endl;
 }
 
 Board::Board(const std::array<uint32_t, boardSize> boardState) {
@@ -36,7 +35,6 @@ Board::Board(const std::array<uint32_t, boardSize> boardState) {
     }
   }
   hash = hashBoardState(boardState);
-  //  std::cout << "created Board with hash:\t" << this->getHash() << std::endl;
 }
 
 Board::Board(const Board &b) //  straight copy constructor
@@ -81,12 +79,9 @@ Board::Board(const Board &b, enum tileMove move) //  copy
   moveHistory.push_back(move);
   ++pathlength;
   hash = hashBoardState(boardState);
-  //  std::cout << "created Board with hash:\t" << this->getHash() << std::endl;
 }
 
 Board::~Board() {
-  //	std::cout << "destroying Board with hash:\t" << this->getHash() <<
-  //std::endl;
 }
 
 //  iterators for range functions used as [begin, end)
@@ -260,13 +255,19 @@ std::stack<std::shared_ptr<Board>> spawnBoardMovesFrom(const Board &B) {
   return BoardMoves;
 }
 
-void generateAdmissibleHeuristic(std::shared_ptr<Board> B) {
-  generateAdmissibleHeuristic(*B);
+void generateManhattanHeuristic(std::shared_ptr<Board> B) {
+  generateManhattanHeuristic(*B);
 }
 
-void generateAdmissibleHeuristic(Board &B) {
+void generateManhattanHeuristic(Board &B) {
   for (int i = 0; i < boardSize; ++i)
     B.heuristic += abs((i - ((int)B[i] + 1)) / 2);
+}
+
+void generateMisplacedTilesHeuristic ( Board& B ) {
+	for (int i = 0; i < boardSize; ++i)
+		if (i != B[i])
+			++B.heuristic;
 }
 
 void printBoard(const std::shared_ptr<Board> B) { printBoard(*B); }
