@@ -84,6 +84,7 @@ public:
     friend std::stack<std::shared_ptr<Board>> spawnBoardMovesFrom ( const Board& B );    //  spawns a vector of new Boards based on possible moves from current boardState. Equivalent to STATE EXPANSION! :-)
 	friend std::stack<std::shared_ptr<Board>> spawnBoardMovesFrom ( const std::shared_ptr<Board> B );    //  takes a shared_ptr!
 	
+	
 	friend void printBoard ( const Board& B );
 	friend void printBoard ( const std::shared_ptr<Board> B );
 	
@@ -133,8 +134,10 @@ const bool operator< ( const Board& lhs, const Board& rhs );
 const bool operator< ( const std::shared_ptr<Board>& lhs, const std::shared_ptr<Board>& rhs );
 const bool operator> ( const Board& lhs, const Board& rhs );
 const bool operator> ( const std::shared_ptr<Board>& lhs, const std::shared_ptr<Board>& rhs );
-
-
+const bool operator<= ( const Board& lhs, const Board& rhs );
+const bool operator<= ( const std::shared_ptr<Board>& lhs, const std::shared_ptr<Board>& rhs );
+const bool operator>= ( const Board& lhs, const Board& rhs );
+const bool operator>= ( const std::shared_ptr<Board>& lhs, const std::shared_ptr<Board>& rhs );
 
 
 

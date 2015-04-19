@@ -11,8 +11,10 @@ const heuristicFunction HEURISTIC_FUNCTION = manhattanDistance;
 
 //	a tester function to do a print the status of flag
 void print_inBitSet( const std::bitset<domain_size>& set, const Board& B );
-void print_SUCCESS ( std::shared_ptr<Board>& B, size_t queueSize, uint32_t numExpansions );
+void print_SUCCESS ( Board& B, size_t queueSize, uint32_t numExpansions, float runtime );
 void print_FAIL ( void );
+
+std::stack<std::shared_ptr<Board>> reverseBoardStackOrder ( std::stack<std::shared_ptr<Board>> stack );
 
 
 
