@@ -14,6 +14,8 @@ void print_inBitSet( const std::bitset<domain_size>& set, const Board& B );
 void print_SUCCESS ( Board& B, size_t queueSize, uint32_t numExpansions, float runtime );
 void print_FAIL ( void );
 
+std::array<uint32_t, 9> stringToBoardArrayRepresentation( const std::string& initString );
+
 std::stack<std::shared_ptr<Board>> reverseBoardStackOrder ( std::stack<std::shared_ptr<Board>> stack );
 
 
