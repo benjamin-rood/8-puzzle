@@ -64,7 +64,7 @@ int main(int argc, const char * argv[])
 			if (highest_Q_length < BreadthFirst_Q.size() )	highest_Q_length = BreadthFirst_Q.size();
 			B = BreadthFirst_Q.front();
 			BreadthFirst_Q.pop();
-			std::cout << *B << "\t" << B->getHash() << "\tfCost = " << B->getFCost() << std::endl;
+			
 			if ( testForGoalState(B) ) {
 				actualRunningTime = ((float)(clock() - startTime) / CLOCKS_PER_SEC);
 				print_SUCCESS(*B, highest_Q_length, numOfStateExpansions, actualRunningTime);

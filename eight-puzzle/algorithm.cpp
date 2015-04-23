@@ -168,40 +168,24 @@ std::string bestFirstSearch_Visited_List(std::string const initialState,
   std::multimap<fCost_t, Board_ptr> enqueuedTree;
 	
   std::multimap<fCost_t, Board_ptr>::iterator enqueuedTree_it;
-	
-  std::map<hash_t, Board_ptr> enqHashMap;	//	using a map so
-														//	we can arrange by hash
-														//	for faster comparisons!
-	
-  std::map<hash_t, Board_ptr>::iterator enqHashMap_it;
 
   generateManhattanHeuristic(*S);
 
   enqueuedTree.insert(
       std::make_pair(S->getFCost(), S));			//	first element in Q...
-  enqHashMap.insert(std::make_pair(
-      S->getHash(), S));							//	...and add accompanying Board
-													//	state to hash map
 
   while (enqueuedTree.empty() == false) {
     maxQLength = std::max(
         maxQLength, (int)enqueuedTree.size()); //	keeping track of Q size
 
     B = enqueuedTree.begin()->second;
-    enqueuedTree.erase(enqueuedTree.begin()); //	once it's off the queue,
-                                                  //surely get it actually OFF
-                                                  //the queue?
-    if ((enqHashMap_it = enqHashMap.find(B->getHash())) != enqHashMap.end()) {
-      enqHashMap.erase(enqHashMap_it); //	...the same with the accompanying
-                                     //reference in the hash map, no?
-    }
+    enqueuedTree.erase(enqueuedTree.begin());		// pop the reference to B off the Q.
 
     if (testForGoalState(*B)) {
       success = true;
       actualRunningTime = ((float)(clock() - startTime) / CLOCKS_PER_SEC);
       print_SUCCESS(*B, maxQLength, numOfStateExpansions, actualRunningTime);
       return getMoveHistoryString(B);
-      break;
     }
 
     expandedStack = spawnBoardMovesFrom(*B);
@@ -211,21 +195,12 @@ std::string bestFirstSearch_Visited_List(std::string const initialState,
       auto &top = expandedStack.top();
       generateManhattanHeuristic(*top);
       if (visited_list[top->getHash()] == false) {
-        if ((enqHashMap_it = enqHashMap.find(top->getHash())) ==
-            enqHashMap
-                .end()) { //	Not already in queue, just directly insert it
-          enqueuedTree.insert(
-              std::make_pair(top->getFCost(), top)); //	add element in Q...
-          enqHashMap.insert(std::make_pair(
-              top->getHash(),
-              top)); //	...and add accompanying Board state to hash map
+		  enqueuedTree.insert(std::make_pair(top->getFCost(), top)); //	add element in Q...
           visited_list.set(top->getHash());
-        }
-      }
+	  }
       expandedStack.pop();
     }
   }
-
   if (!(success)) {
     actualRunningTime = ((float)(clock() - startTime) / CLOCKS_PER_SEC);
     print_FAIL();
