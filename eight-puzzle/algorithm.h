@@ -7,6 +7,7 @@
 #include <queue>
 
 const uint32_t domain_size = 362880;
+typedef std::shared_ptr<Board> Board_ptr;
 const heuristicFunction HEURISTIC_FUNCTION = manhattanDistance;
 
 //	a tester function to do a print the status of flag
