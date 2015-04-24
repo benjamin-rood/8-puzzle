@@ -5,6 +5,9 @@
 #include <algorithm>
 #include <bitset>
 #include <queue>
+#include <map>
+#include <set>
+#include <unordered_map>
 
 const uint32_t domain_size = 362880;
 typedef std::shared_ptr<Board> Board_ptr;

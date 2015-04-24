@@ -7,14 +7,12 @@
 //
 
 #include "algorithm.h"
-#include <map>
-#include <unordered_map>
-#include <unordered_set>
 
 
 
 int main(int argc, const char * argv[])
 {
+	
 	const std::string goalString	= "012345678";
 	const std::string s1			= "042158367";
 	const std::string s2			= "168342750";
@@ -25,7 +23,7 @@ int main(int argc, const char * argv[])
 	const std::string simple2		= "312645078";
 	const std::string simple3		= "312645708";
 	
-	const std::string& initialState = s1;
+	const std::string& initialState = s4;
 	
 	int numOfStateExpansions = 0;
 	int maxQLength = 0;
@@ -52,12 +50,20 @@ int main(int argc, const char * argv[])
 		std::queue<std::shared_ptr<Board>> BreadthFirst_Q;	//	FIFO Enqueued List!
 		std::stack<std::shared_ptr<Board>> tempStack;
 		std::stack<std::shared_ptr<Board>> expandedStack;
-		std::bitset<domain_size> visitedList;			//	the same type gets used for both visited and strict expanded list.
+		//std::bitset<domain_size> visitedList;			//	the same type gets used for both visited and strict expanded list.
 		//	a bitset is initialised by default with all bits set to 0 (false).
-
-		std::shared_ptr<Board> start = std::make_shared<Board>( stringToBoardArrayRepresentation(initialState) );
-		BreadthFirst_Q.push( start );
-		std::shared_ptr<Board>& B = start;
+		std::set<hash_t> visitedList;
+		Board_ptr S = std::make_shared<Board>( stringToBoardArrayRepresentation(initialState) );
+		generateManhattanHeuristic(S);
+		std::cout << *S << "\t\t" << std::hex << S->getHash() << "\t\tfCost = " << S->getFCost() << std::endl;
+		std::cout << (((hash_t)S->getFCost()) << 20) << std::endl;
+		std::cout << ((S->getHash()) ^ (((hash_t)S->getFCost()) << 20)) << std::endl;
+		std::cout << (((hash_t)S->getFCost()) << 20) << " +  " << S->getHash() << " = " << (((hash_t)S->getFCost()) << 20) + S->getHash() << std::endl;
+		
+		hash_t c = ((S->getHash()) ^ (((hash_t)S->getFCost()) << 20));
+		BreadthFirst_Q.push( S );
+		std::shared_ptr<Board>& B = S;
+		visitedList.insert(c);
 
 
 		while (!( BreadthFirst_Q.empty() ))	{
@@ -66,12 +72,11 @@ int main(int argc, const char * argv[])
 			BreadthFirst_Q.pop();
 			
 			if ( testForGoalState(B) ) {
+				std::cout << std::dec;
 				actualRunningTime = ((float)(clock() - startTime) / CLOCKS_PER_SEC);
 				print_SUCCESS(*B, highest_Q_length, numOfStateExpansions, actualRunningTime);
 				break;
 			}
-
-			visitedList.set( B->getHash() );
 			tempStack = spawnBoardMovesFrom( B );
 			++numOfStateExpansions;
 			
@@ -83,12 +88,15 @@ int main(int argc, const char * argv[])
 
 			while (!( expandedStack.empty() )) {
 				auto& top = expandedStack.top();
-				if ( visitedList[top->getHash()] == false )
+				c = ((top->getHash()) ^ (((hash_t)top->getFCost()) << 20));
+				//std::cout << visitedList.count(c) << std::endl;
+				if ( visitedList.count(c) == false ) {
 					BreadthFirst_Q.push( top );
+					visitedList.insert(c);
+				}
 				expandedStack.pop();
 			}
 		}
 	}
-	
 }
 

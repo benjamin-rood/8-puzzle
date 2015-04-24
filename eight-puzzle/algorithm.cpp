@@ -72,9 +72,7 @@ std::string PDS_Visited_List(std::string const initialState,
   // PROGRESSIVE DEEPENING SEARCH:
   printf("PROGRESSIVE DEEPENING SEARCH\n");
   bool success = false;
-  std::bitset<domain_size> visitedList; //	the same type gets used for both
-                                        //visited and strict expanded list.
-  //	a bitset is initialised by default with all bits set to 0 (false).
+  std::set<hash_t> visitedList;	// the simplest self-banacing Red-Black tree variety in the STL
 
   std::stack<Board_ptr> qStack; //	LIFO Enqueued List!
   std::stack<Board_ptr> expandedStack;
@@ -87,8 +85,9 @@ std::string PDS_Visited_List(std::string const initialState,
 
   while (depth_stop != ultimateMaxDepth) {
     ++depth_stop;
-    visitedList.reset();
-
+    visitedList.clear();
+	hash_t c = ((S->getHash()) ^ (((hash_t)S->getFCost()) << 20));
+	visitedList.insert(c);
     qStack.push(S);
 
     while (!qStack.empty()) {
@@ -110,13 +109,19 @@ std::string PDS_Visited_List(std::string const initialState,
       while (!(expandedStack.empty())) {
         auto &top = expandedStack.top();
         if (getPathLength(top) != depth_stop) {
-          //				if (( visitedList[top->getHash()] == false ) && (
-          //getPathLength(top) != depth_stop ))	{
-          //					visitedList.set( top->getHash() );	//	add
-          //top to visited list
-          qStack.push(top);
-        }
-        expandedStack.pop();
+          c = ((top->getHash()) ^ (((hash_t)top->getFCost()) << 20));
+											// merging fCost w/ hash. NOTE: the
+                                            // fCost must be cast to uint32_t as
+                                            // it had to be a signed int for the
+                                            // manhattan distance algorithm
+          if (visitedList.count(c) == false) { // this is the test. As a set is
+                                               // ‘unique’, count will only
+                                               // return 1 or 0
+				qStack.push( top );
+				visitedList.insert(c);		// add the relevant entry to the visited list.
+		   }
+		}
+		expandedStack.pop();
       }
     }
     //	end PDS dive at depth_stop
