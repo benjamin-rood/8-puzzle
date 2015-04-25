@@ -23,7 +23,7 @@ int main(int argc, const char * argv[])
 	const std::string simple2		= "312645078";
 	const std::string simple3		= "312645708";
 	
-	const std::string& initialState = s4;
+	const std::string& initialState = s5;
 	
 	int numOfStateExpansions = 0;
 	int maxQLength = 0;
