@@ -1,6 +1,6 @@
 # README #
 
-Woo-Hoo! Here is Dave & Ben's 159.302 
+Woo-Hoo! Here is Ben's 159.302 
 
 # ** ASSIGNMENT ONE ** #
 ##**The Mystery of The Eight Puzzle! ** 
