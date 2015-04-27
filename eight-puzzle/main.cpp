@@ -3,155 +3,166 @@
 //  eight-puzzle
 //
 //  Created by Benjamin Rood on 9/04/15.
-//  Copyright (c) 2015 Dave & Ben. All rights reserved.
 //
 
-#include "board_obj.h"
-#include <bitset>
-#include <stack>
-#include <queue>
-#include <set>
+#include <iomanip>
+#include "algorithm.h"
 
-const uint32_t domain_size = 362880;
+using namespace std;
 
-//	a tester function to do a print the status of flag
-void print_inBitSet( const std::bitset<domain_size>& set, const Board& B )	{
-	std::cout << "Board has been visited:\t";
-	if (set[B.getHash()])
-		std::cout << "YES\n";
-	else std::cout << "NO\n";
-}
-
-void print_SUCCESS ( std::shared_ptr<Board>& B, size_t queueSize, uint32_t numExpansions )	{
-	std::cout << "SUCCESS!\n\n";
-	printBoard( B );
-	std::cout << std::endl;
-	std::cout << "Maximum Queue Length = " << queueSize << std::endl;
-	std::cout << "Path Length = " << getPathLength(B) << std::endl;
-	std::cout << "Number of State Expansions = " << numExpansions << std::endl;
-	std::string successPath = getMoveHistoryString( B );
-	for ( auto& s : successPath )
-		std::cout << s << " > ";
-	std::cout << "GOAL\n\n";
-}
-
-void print_FAIL ( void )	{
-	std::cout << "FAILED to find GOAL.\n\n";
-}
-
-int main(int argc, const char * argv[]) {
+void AnimateSolution(string const initialState, string const goalState, string path){
 	
+	int step=1;
 	
-	// PROGRESSIVE DEEPING SEARCH:
-	{
-		bool success = false;
-		size_t highest_Q_length = 0;
-		uint32_t num_of_expansions = 0;
-		std::bitset<domain_size> visitedList;			//	the same type gets used for both visited and strict expanded list.
-														//	a bitset is initialised by default with all bits set to 0 (false).
-		
-		std::stack<std::shared_ptr<Board>> qStack;	//	LIFO Enqueued List!
-		std::stack<std::shared_ptr<Board>> expandedStack;
-		
-		uint32_t depth_stop = 1;
-		uint32_t depth_max = 60;
-		
-		std::cout << "PROGRESSIVE DEEPING SEARCH\n\n";
-		
-		while ( depth_stop != depth_max ) {
-			++depth_stop;
-			visitedList.reset();
-//			std::cout << "Begin >> Progressive Deepening Search:\tDepth = " << depth_stop-1 << "\n\n";
-			
-			std::shared_ptr<Board> start = std::make_shared<Board>( start4State );
-			qStack.push( start );
-			std::shared_ptr<Board>& B = start;
-			
-			
-			while (!( qStack.empty() ))	{
-				if (highest_Q_length < qStack.size() )	highest_Q_length = qStack.size();
-				
-				B = qStack.top();
-				qStack.pop();	//	once B retrieved from qStack, pop qStack.
-				visitedList.set( B->getHash() );	//	add B to visited list
-				
-				if ( testForGoalState(B) )	{
-					success = true;
-					print_SUCCESS(B, highest_Q_length, num_of_expansions);
-					break;
-				}
-				
-//				printBoard( B );
-//				
-//				auto currentPath = std::make_shared<std::string>(getMoveHistoryString( B ));
-//				for ( auto& cp : *currentPath )
-//					std::cout << cp << " > ";
-//				std::cout << "\n\n";
-				
-				
-				expandedStack = spawnBoardMovesFrom( B );
-				++num_of_expansions;
-				
-				while (!( expandedStack.empty() ))	{
-					auto& top = expandedStack.top();
-					if (( visitedList[top->getHash()] == false ) && ( getPathLength(top) != depth_stop ))
-						qStack.push( top );
-					expandedStack.pop();
-				}
-			}
-			//	end PDS dive at depth_stop
-			if ( success )	break;
-		}
-		
-		if (!( success ))
-			print_FAIL();
-	}	//	end PDS.
+	cout << endl << "--------------------------------------------------------------------" << endl;
 	
-	
-	// BREADTH-FIRST SEARCH:
-	{
-		std::cout << "BREADTH-FIRST SEARCH\n\n";
-		
-		size_t highest_Q_length = 0;
-		uint32_t num_of_expansions = 0;
-		
-		std::queue<std::shared_ptr<Board>> BreadthFirst_Q;	//	FIFO Enqueued List!
-		std::stack<std::shared_ptr<Board>> tempStack;
-		std::stack<std::shared_ptr<Board>> expandedStack;
-		std::bitset<domain_size> visitedList;			//	the same type gets used for both visited and strict expanded list.
-		//	a bitset is initialised by default with all bits set to 0 (false).
-
-		std::shared_ptr<Board> start = std::make_shared<Board>( start4State );
-		BreadthFirst_Q.push( start );
-		std::shared_ptr<Board>& B = start;
-
-
-		while (!( BreadthFirst_Q.empty() ))	{
-			if (highest_Q_length < BreadthFirst_Q.size() )	highest_Q_length = BreadthFirst_Q.size();
-			B = BreadthFirst_Q.front();
-			BreadthFirst_Q.pop();
-			if ( testForGoalState(B) ) {
-				print_SUCCESS(B, highest_Q_length, num_of_expansions);
-				break;
-			}
-
-			visitedList.set( B->getHash() );
-			tempStack = spawnBoardMovesFrom( B );
-			++num_of_expansions;
-			
-			
-			while (!( tempStack.empty() ))	{
-				expandedStack.push( tempStack.top() );
-				tempStack.pop();
-			}
-
-			while (!( expandedStack.empty() )) {
-				auto& top = expandedStack.top();
-				if ( visitedList[top->getHash()] == false )
-					BreadthFirst_Q.push( top );
-				expandedStack.pop();
-			}
-		}
+	if (path==""){
+		cout << endl << "Nothing to animate." << endl;
+	} else {
+		cout << endl << "Animating solution..." << endl;
+		cout << "Plan of action = " << path << endl;
 	}
+	
+	Board_ptr B = std::make_shared<Board>(stringToBoardArrayRepresentation(initialState));
+	string strState;
+	
+	strState = getStateString(B);
+	//displayBoard(strState);
+	
+	cout << "--------------------------------------------------------------------" << endl;
+	
+	for(int i=0; i < path.length(); i++){
+		
+		cout << endl << "Step #" << step << ")  ";
+		switch(path[i]){
+				
+			case 'U': B = std::make_shared<Board>(*B, UP); cout << "[UP]" << endl;
+				break;
+			case 'D': B = std::make_shared<Board>(*B, DOWN); cout << "[DOWN]" << endl;
+				break;
+			case 'L': B = std::make_shared<Board>(*B, LEFT); cout << "[LEFT]" << endl;
+				break;
+			case 'R': B = std::make_shared<Board>(*B, RIGHT); cout << "[RIGHT]" << endl;
+				break;
+		}
+		strState = getStateString(B);
+		//displayBoard(strState);
+		
+		step++;
+	}
+	
+	
+	cout << endl << "Animation done." << endl;
+	cout << "--------------------------------------------------------------------" << endl;
+	
+	//getch();
+}
+
+int main(int argc, const char * argv[])
+{
+	string path;
+
+	if(argc < 5){
+		cout << "SYNTAX: main.exe <TYPE_OF_RUN = batch_run/single_run> ALGORITHM_NAME \"INITIAL STATE\" \"GOAL STATE\" " << endl;
+		exit(0);
+	}
+
+	string typeOfRun(argv[1]);
+	string algorithmSelected(argv[2]);
+	string initialState(argv[3]);
+	string goalState(argv[4]);
+
+
+	size_t pathLength=0;
+	//int depth=0;
+	int numOfStateExpansions=0;
+	int maxQLength=0;
+	float actualRunningTime=0.0f;
+	
+	
+	
+	//=========================================================================================================
+
+	if(typeOfRun == "single_run") {
+		cout << endl << "============================================<< EXPERIMENT RESULTS >>============================================" << endl;
+	}
+
+	//=========================================================================================================
+	//Run algorithm
+	if(algorithmSelected == "PDS_Visited_List" ){
+		path = PDS_Visited_List(initialState,  goalState, numOfStateExpansions, maxQLength, actualRunningTime, 500);
+
+	} else if(algorithmSelected == "bestFirstSearch_Visited_List" ){
+		path = bestFirstSearch_Visited_List(initialState, goalState, numOfStateExpansions, maxQLength, actualRunningTime);
+
+	}  else if(algorithmSelected == "uniformCost_Exp_List" ){
+		path = uniformCost_Exp_List(initialState, goalState, numOfStateExpansions, maxQLength, actualRunningTime);
+
+	}  else if(algorithmSelected == "aStar_Misplaced" ){
+		path = aStar(initialState, goalState, numOfStateExpansions, maxQLength, actualRunningTime, misplacedTiles);
+
+	}  else if(algorithmSelected == "aStar_Manhattan" ){
+		path = aStar(initialState, goalState, numOfStateExpansions, maxQLength, actualRunningTime, manhattanDistance);
+
+	}  else if(algorithmSelected == "aStar_Exp_List_Misplaced" ){
+		path = aStar_Exp_List(initialState, goalState, numOfStateExpansions, maxQLength, actualRunningTime, misplacedTiles);
+
+	}  else if(algorithmSelected == "aStar_Exp_List_Manhattan" ){
+		path = aStar_Exp_List(initialState, goalState, numOfStateExpansions, maxQLength, actualRunningTime, manhattanDistance);
+	}
+
+	pathLength = path.size();
+
+	//Display name of algorithm
+	if(algorithmSelected == "PDS_Visited_List" ){
+		cout << setw(28) << std::left << "1) PDS_Visited_List";
+
+	} else if(algorithmSelected == "bestFirstSearch_Visited_List" ){
+		cout << setw(28) << std::left << "2) Best_First_Visited_List";
+	} else if(algorithmSelected == "BFS_Visited_List" ){
+		cout << setw(28) << std::left << "2) BFS_Visited_List";
+
+	}  else if(algorithmSelected == "uniformCost_Exp_List" ){
+		cout << setw(28) << std::left << "3) UC_Exp_List";
+
+	}  else if(algorithmSelected == "aStar_Misplaced" ){
+		cout << setw(28) << std::left << "4) ASTAR_Misplaced";
+
+	}  else if(algorithmSelected == "aStar_Manhattan" ){
+		cout << setw(28) << std::left << "5) ASTAR_Manhattan";
+
+	}  else if(algorithmSelected == "aStar_Exp_List_Misplaced" ){
+		cout << setw(28) << std::left << "6) ASTAR_Exp_Misplaced";
+
+	}  else if(algorithmSelected == "aStar_Exp_List_Manhattan" ){
+		cout << setw(28) << std::left << "7) ASTAR_Exp_Manhattan";
+
+	}
+
+
+	if(typeOfRun == "batch_run"){
+
+		cout  << setprecision(6) << std::setfill(' ')   << std::fixed << std::right << ' ' << setw(10) << pathLength;
+		cout  << setprecision(6) << std::setfill(' ')   << std::fixed << std::right << ' ' <<  setw(10) << numOfStateExpansions;
+		cout  << setprecision(6) << std::setfill(' ')   << std::fixed << std::right << ' ' <<  setw(15) << maxQLength;
+		cout  << setprecision(6) << std::setfill(' ')   << std::fixed << std::right << ' ' <<  setw(15) << actualRunningTime << endl;
+
+	} else if(typeOfRun == "single_run"){
+		cout << setprecision(6) << setw(25) << std::setfill(' ') <<  std::right << endl << endl << "Initial State:" << std::fixed << ' ' << setw(12) << initialState << endl;
+		cout << setprecision(6) << setw(25) << std::setfill(' ') <<  std::right << "Goal State:" << std::fixed << ' ' << setw(12) << goalState << endl;
+		cout << setprecision(6) << setw(25) << std::setfill(' ') <<  std::right << endl <<  "Path Length:" << std::fixed << ' ' << setw(12) << pathLength << endl;
+		cout << setprecision(6) << setw(25) << std::setfill(' ') <<  std::right << "Num Of State Expansions:" << std::fixed << ' ' << setw(12) <<  numOfStateExpansions << endl;
+		cout << setprecision(6) << setw(25) << std::setfill(' ') <<  std::right << "Max Q Length:" << std::fixed << ' ' << setw(12) << maxQLength << endl;
+		cout << setprecision(6) << setw(25) << std::setfill(' ') <<  std::right << "Actual Running Time:" << std::fixed << ' ' << setprecision(6) << setw(12) <<  actualRunningTime << endl;
+		cout << "================================================================================================================" << endl << endl;
+		
+		if(path != "") {
+			AnimateSolution(initialState, goalState, path);
+		}
+
+	}
+	
+	
+	return 0;
 }
 
