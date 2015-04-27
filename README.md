@@ -11,7 +11,7 @@ Woo-Hoo! Here is Ben's 159.302
 ### What is this repository for? ###
 
 * Implementing search algorithms to get a computer program to solve the mystery of the eight puzzle.
-* v0.1
+* v1.0
 
 ### How do I get set up? ###
 
