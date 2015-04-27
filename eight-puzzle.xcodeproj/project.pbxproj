@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		23309F671AD8D344009E6176 /* makefile in Sources */ = {isa = PBXBuildFile; fileRef = 23309F5F1AD8D344009E6176 /* makefile */; };
 		23309F681AD8D344009E6176 /* algorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23309F601AD8D344009E6176 /* algorithm.cpp */; };
+		2369808C1AEEEB4600EF95AF /* graphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2369808A1AEEEB4600EF95AF /* graphics.cpp */; };
+		2369808D1AEEEB4600EF95AF /* Animate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2369808B1AEEEB4600EF95AF /* Animate.cpp */; };
 		23C90B671AD62CC7008A00F1 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23C90B661AD62CC7008A00F1 /* main.cpp */; };
 		23C90B6F1AD62D94008A00F1 /* board_obj.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23C90B6D1AD62D94008A00F1 /* board_obj.cpp */; };
 /* End PBXBuildFile section */
@@ -32,6 +34,9 @@
 		23309F5F1AD8D344009E6176 /* makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = makefile; sourceTree = "<group>"; };
 		23309F601AD8D344009E6176 /* algorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = algorithm.cpp; sourceTree = "<group>"; };
 		23309F611AD8D344009E6176 /* clean.bat */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = clean.bat; sourceTree = "<group>"; };
+		236980891AEEEB4600EF95AF /* graphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = graphics.h; sourceTree = "<group>"; };
+		2369808A1AEEEB4600EF95AF /* graphics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = graphics.cpp; sourceTree = "<group>"; };
+		2369808B1AEEEB4600EF95AF /* Animate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Animate.cpp; sourceTree = "<group>"; };
 		23C90B631AD62CC7008A00F1 /* eight-puzzle */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "eight-puzzle"; sourceTree = BUILT_PRODUCTS_DIR; };
 		23C90B661AD62CC7008A00F1 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		23C90B6D1AD62D94008A00F1 /* board_obj.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = board_obj.cpp; sourceTree = "<group>"; };
@@ -68,6 +73,9 @@
 		23C90B651AD62CC7008A00F1 /* eight-puzzle */ = {
 			isa = PBXGroup;
 			children = (
+				236980891AEEEB4600EF95AF /* graphics.h */,
+				2369808A1AEEEB4600EF95AF /* graphics.cpp */,
+				2369808B1AEEEB4600EF95AF /* Animate.cpp */,
 				23309F591AD8D344009E6176 /* run.bat */,
 				23309F5D1AD8D344009E6176 /* run_one.bat */,
 				23309F5E1AD8D344009E6176 /* algorithm.h */,
@@ -141,6 +149,8 @@
 				23C90B6F1AD62D94008A00F1 /* board_obj.cpp in Sources */,
 				23C90B671AD62CC7008A00F1 /* main.cpp in Sources */,
 				23309F671AD8D344009E6176 /* makefile in Sources */,
+				2369808C1AEEEB4600EF95AF /* graphics.cpp in Sources */,
+				2369808D1AEEEB4600EF95AF /* Animate.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

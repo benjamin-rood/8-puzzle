@@ -3,7 +3,9 @@ cls
 @echo ==============================================================================================================
 @echo                                               SEARCH ALGORITHMS 
 @echo ==============================================================================================================
-@echo submitted by:   Benjamin Rood, 13145989
+@echo submitted by:   Name, ID number
+@echo                 Name, ID number
+@echo                 Name, ID number
 @echo ==============================================================================================================
 @echo EXPERIMENT (1)
 @echo ==============================================================================================================
@@ -12,13 +14,13 @@ cls
 @echo  ALGORITHM		  PATH_LENGTH	STATE_EXPANSIONS    MAX_QLENGTH	 RUNNING_TIME 
 @echo ==============================================================================================================
 
-main.exe "batch_run" "PDS_Visited_List"			"042158367" "012345678"
+main.exe "batch_run" "PDS_Visited_List" 					"042158367" "012345678"
 main.exe "batch_run" "bestFirstSearch_Visited_List" 	"042158367" "012345678"
-main.exe "batch_run" "uniformCost_Exp_List" 		"042158367" "012345678"
-main.exe "batch_run" "aStar_Misplaced" 			"042158367" "012345678"
-main.exe "batch_run" "aStar_Manhattan" 			"042158367" "012345678"
+main.exe "batch_run" "uniformCost_Exp_List" 				"042158367" "012345678"
+main.exe "batch_run" "aStar_Misplaced" 					"042158367" "012345678"
+main.exe "batch_run" "aStar_Manhattan" 					"042158367" "012345678"
 main.exe "batch_run" "aStar_Exp_List_Misplaced"      	"042158367" "012345678"
-main.exe "batch_run" "aStar_Exp_List_Manhattan" 	"042158367" "012345678"
+main.exe "batch_run" "aStar_Exp_List_Manhattan" 		"042158367" "012345678"
 
 
 @echo ==============================================================================================================
@@ -28,13 +30,13 @@ main.exe "batch_run" "aStar_Exp_List_Manhattan" 	"042158367" "012345678"
 @echo ==============================================================================================================
 @echo  ALGORITHM		  PATH_LENGTH	STATE_EXPANSIONS    MAX_QLENGTH	 RUNNING_TIME 
 @echo ==============================================================================================================
-main.exe "batch_run" "PDS_Visited_List" 		"168342750" "012345678"
+main.exe "batch_run" "PDS_Visited_List" 					"168342750" "012345678"
 main.exe "batch_run" "bestFirstSearch_Visited_List" 	"168342750" "012345678"
-main.exe "batch_run" "uniformCost_Exp_List" 		"168342750" "012345678"
-main.exe "batch_run" "aStar_Misplaced" 			"168342750" "012345678"
-main.exe "batch_run" "aStar_Manhattan" 			"168342750" "012345678"
+main.exe "batch_run" "uniformCost_Exp_List" 				"168342750" "012345678"
+main.exe "batch_run" "aStar_Misplaced" 					"168342750" "012345678"
+main.exe "batch_run" "aStar_Manhattan" 					"168342750" "012345678"
 main.exe "batch_run" "aStar_Exp_List_Misplaced"      	"168342750" "012345678"
-main.exe "batch_run" "aStar_Exp_List_Manhattan" 	"168342750" "012345678"
+main.exe "batch_run" "aStar_Exp_List_Manhattan" 		"168342750" "012345678"
 
 @echo ==============================================================================================================
 @echo EXPERIMENT (3)
@@ -43,13 +45,13 @@ main.exe "batch_run" "aStar_Exp_List_Manhattan" 	"168342750" "012345678"
 @echo ==============================================================================================================
 @echo  ALGORITHM		  PATH_LENGTH	STATE_EXPANSIONS    MAX_QLENGTH	 RUNNING_TIME 
 @echo ==============================================================================================================
-main.exe "batch_run" "PDS_Visited_List" 		"481302675" "012345678"
+main.exe "batch_run" "PDS_Visited_List" 					"481302675" "012345678"
 main.exe "batch_run" "bestFirstSearch_Visited_List" 	"481302675" "012345678"
-main.exe "batch_run" "uniformCost_Exp_List" 		"481302675" "012345678"
-main.exe "batch_run" "aStar_Misplaced" 			"481302675" "012345678"
-main.exe "batch_run" "aStar_Manhattan" 			"481302675" "012345678"
+main.exe "batch_run" "uniformCost_Exp_List" 				"481302675" "012345678"
+main.exe "batch_run" "aStar_Misplaced" 					"481302675" "012345678"
+main.exe "batch_run" "aStar_Manhattan" 					"481302675" "012345678"
 main.exe "batch_run" "aStar_Exp_List_Misplaced"      	"481302675" "012345678"
-main.exe "batch_run" "aStar_Exp_List_Manhattan" 	"481302675" "012345678"
+main.exe "batch_run" "aStar_Exp_List_Manhattan" 		"481302675" "012345678"
 
 
 @echo ==============================================================================================================
@@ -59,13 +61,13 @@ main.exe "batch_run" "aStar_Exp_List_Manhattan" 	"481302675" "012345678"
 @echo ==============================================================================================================
 @echo  ALGORITHM		  PATH_LENGTH	STATE_EXPANSIONS    MAX_QLENGTH	 RUNNING_TIME 
 @echo ==============================================================================================================
-main.exe "batch_run" "PDS_Visited_List" 		"876543210" "012345678"
+main.exe "batch_run" "PDS_Visited_List" 					"876543210" "012345678"
 main.exe "batch_run" "bestFirstSearch_Visited_List" 	"876543210" "012345678"
-main.exe "batch_run" "uniformCost_Exp_List" 		"876543210" "012345678"
-main.exe "batch_run" "aStar_Misplaced" 			"876543210" "012345678"
-main.exe "batch_run" "aStar_Manhattan" 			"876543210" "012345678"
+main.exe "batch_run" "uniformCost_Exp_List" 				"876543210" "012345678"
+main.exe "batch_run" "aStar_Misplaced" 					"876543210" "012345678"
+main.exe "batch_run" "aStar_Manhattan" 					"876543210" "012345678"
 main.exe "batch_run" "aStar_Exp_List_Misplaced"      	"876543210" "012345678"
-main.exe "batch_run" "aStar_Exp_List_Manhattan" 	"876543210" "012345678"
+main.exe "batch_run" "aStar_Exp_List_Manhattan" 		"876543210" "012345678"
 
 @echo ==============================================================================================================
 @echo EXPERIMENT (5)
@@ -74,12 +76,12 @@ main.exe "batch_run" "aStar_Exp_List_Manhattan" 	"876543210" "012345678"
 @echo ==============================================================================================================
 @echo  ALGORITHM		  PATH_LENGTH	STATE_EXPANSIONS    MAX_QLENGTH	 RUNNING_TIME 
 @echo ==============================================================================================================
-main.exe "batch_run" "PDS_Visited_List" 		"123804765" "012345678"
+main.exe "batch_run" "PDS_Visited_List" 					"123804765" "012345678"
 main.exe "batch_run" "bestFirstSearch_Visited_List" 	"123804765" "012345678"
-main.exe "batch_run" "uniformCost_Exp_List" 		"123804765" "012345678"
-main.exe "batch_run" "aStar_Misplaced" 			"123804765" "012345678"
-main.exe "batch_run" "aStar_Manhattan" 			"123804765" "012345678"
+main.exe "batch_run" "uniformCost_Exp_List" 				"123804765" "012345678"
+main.exe "batch_run" "aStar_Misplaced" 					"123804765" "012345678"
+main.exe "batch_run" "aStar_Manhattan" 					"123804765" "012345678"
 main.exe "batch_run" "aStar_Exp_List_Misplaced"      	"123804765" "012345678"
-main.exe "batch_run" "aStar_Exp_List_Manhattan" 	"123804765" "012345678"
+main.exe "batch_run" "aStar_Exp_List_Manhattan" 		"123804765" "012345678"
 @echo nothing follows.
 
