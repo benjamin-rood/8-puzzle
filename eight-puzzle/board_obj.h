@@ -3,7 +3,6 @@
 //  eight-puzzle
 //
 //  Created by Benjamin Rood on 9/04/15.
-//  Copyright (c) 2015 Dave & Ben. All rights reserved.
 //
 
 #ifndef __eight_puzzle__Board_obj__
@@ -13,6 +12,7 @@
 #include <vector>
 #include <array>
 #include <stack>
+#include <memory>
 #include <random>
 
 typedef uint32_t hash_t;
@@ -109,6 +109,9 @@ public:
 	
 	friend const std::array<uint32_t, 9>& getState ( const Board& B );
 	friend const std::array<uint32_t, 9>& getState ( const std::shared_ptr<Board> B );
+	friend const std::string getStateString ( const Board& B );
+	friend const std::string getStateString ( const std::shared_ptr<Board> B );
+	
 	
 	friend bool testForGoalState ( const Board& B );
 	friend bool testForGoalState ( const std::shared_ptr<Board> B );

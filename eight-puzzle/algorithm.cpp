@@ -69,16 +69,17 @@ std::string PDS_Visited_List(std::string const initialState,
 	clock_t startTime = clock();
 
 	// PROGRESSIVE DEEPENING SEARCH:
-	printf("PROGRESSIVE DEEPENING SEARCH\n");
+	//printf("PROGRESSIVE DEEPENING SEARCH\n");
 	bool success = false;
 	std::set<hash_t> visitedList;				//	the simplest self-banacing Red-Black tree variety in the STL
+												//	THIS IS AN ENHANCED VISITED LIST
 
 	std::stack<Board_ptr> qStack;				//	LIFO Enqueued List
 	
 	std::stack<Board_ptr> expandedStack;		//	holds states spawned from another
 												//	(i.e. the result from expanding a state)
 
-	uint32_t depth_stop = 1;
+	uint32_t depth_stop = 0;
 
 	const Board_ptr S =
 	std::make_shared<Board>(stringToBoardArrayRepresentation(initialState));
@@ -100,7 +101,7 @@ std::string PDS_Visited_List(std::string const initialState,
 			if (testForGoalState(B)) {
 				success = true;
 				actualRunningTime = ((float)(clock() - startTime) / CLOCKS_PER_SEC);
-				print_SUCCESS(*B, maxQLength, numOfStateExpansions, actualRunningTime);
+				//print_SUCCESS(*B, maxQLength, numOfStateExpansions, actualRunningTime);
 				return getMoveHistoryString(B);
 			}
 
@@ -132,7 +133,6 @@ std::string PDS_Visited_List(std::string const initialState,
 
 	if (!(success)) {
 		actualRunningTime = ((float)(clock() - startTime) / CLOCKS_PER_SEC);
-		print_FAIL();
 		return "";
 	}
 
@@ -151,7 +151,7 @@ std::string bestFirstSearch_Visited_List(std::string const initialState,
                                          float &actualRunningTime) {
 	clock_t startTime;
 	startTime = clock();
-	printf("BEST-FIRST SEARCH\n");
+	//printf("BEST-FIRST SEARCH\n");
 	bool success = false;
 	std::bitset<domain_size> visited_list;	//	where positions in SEL are the
 											//	hash value of a Board object.
@@ -188,7 +188,7 @@ std::string bestFirstSearch_Visited_List(std::string const initialState,
 		if (testForGoalState(*B)) {
 			success = true;
 			actualRunningTime = ((float)(clock() - startTime) / CLOCKS_PER_SEC);
-			print_SUCCESS(*B, maxQLength, numOfStateExpansions, actualRunningTime);
+			//print_SUCCESS(*B, maxQLength, numOfStateExpansions, actualRunningTime);
 			return getMoveHistoryString(B);
 		}
 
@@ -208,7 +208,6 @@ std::string bestFirstSearch_Visited_List(std::string const initialState,
 	
 	if (!(success)) {
 		actualRunningTime = ((float)(clock() - startTime) / CLOCKS_PER_SEC);
-		print_FAIL();
 		return "";
 	}
 
@@ -227,7 +226,7 @@ std::string uniformCost_Exp_List(std::string const initialState,
 	//	UNIFORM-COST SEARCH
 
 	clock_t startTime;
-	printf("UNIFORM COST SEARCH w/SEL\n");
+	//printf("UNIFORM COST SEARCH w/SEL\n");
 	startTime = clock();
 
 	bool success = false;
@@ -270,7 +269,7 @@ std::string uniformCost_Exp_List(std::string const initialState,
 		if (testForGoalState(*B)) {
 			success = true;
 			actualRunningTime = ((float)(clock() - startTime) / CLOCKS_PER_SEC);
-			print_SUCCESS(*B, maxQLength, numOfStateExpansions, actualRunningTime);
+			//print_SUCCESS(*B, maxQLength, numOfStateExpansions, actualRunningTime);
 			return getMoveHistoryString(B);
 			break;
 		}
@@ -306,7 +305,6 @@ std::string uniformCost_Exp_List(std::string const initialState,
 	}
 
 	if (!(success)) {
-		print_FAIL();
 		return "";
 	}
 
@@ -324,7 +322,7 @@ std::string aStar(std::string const initialState, std::string const goalState,
 
 	clock_t startTime;
 	startTime = clock();
-	printf("A*\n");
+	//printf("A*\n");
 	bool success = false;
 	std::bitset<domain_size> strict_expanded_list; //	where positions in SEL
                                                  //are the hash value of a Board
@@ -377,7 +375,7 @@ std::string aStar(std::string const initialState, std::string const goalState,
 		if (testForGoalState(*B)) {
 		  success = true;
 		  actualRunningTime = ((float)(clock() - startTime) / CLOCKS_PER_SEC);
-		  print_SUCCESS(*B, maxQLength, numOfStateExpansions, actualRunningTime);
+		  //print_SUCCESS(*B, maxQLength, numOfStateExpansions, actualRunningTime);
 		  return getMoveHistoryString(B);
 		  break;
 		}
@@ -404,7 +402,6 @@ std::string aStar(std::string const initialState, std::string const goalState,
 
 	if (!(success)) {
 		actualRunningTime = ((float)(clock() - startTime) / CLOCKS_PER_SEC);
-		print_FAIL();
 		return "";
 	}
 
@@ -424,7 +421,7 @@ std::string aStar_Exp_List(std::string const initialState,
 
 	clock_t startTime;
 	startTime = clock();
-	printf("A* w/SEL\n");
+	//printf("A* w/SEL\n");
 	bool success = false;
 	std::bitset<domain_size> strict_expanded_list;	//	where positions in SEL
 													//	are the hash value of a Board
@@ -476,7 +473,7 @@ std::string aStar_Exp_List(std::string const initialState,
 		if (testForGoalState(*B)) {
 			success = true;
 			actualRunningTime = ((float)(clock() - startTime) / CLOCKS_PER_SEC);
-			print_SUCCESS(*B, maxQLength, numOfStateExpansions, actualRunningTime);
+			//print_SUCCESS(*B, maxQLength, numOfStateExpansions, actualRunningTime);
 			return getMoveHistoryString(B);
 			break;
 		}
@@ -517,7 +514,6 @@ std::string aStar_Exp_List(std::string const initialState,
 
 	if (!(success)) {
 		actualRunningTime = ((float)(clock() - startTime) / CLOCKS_PER_SEC);
-		print_FAIL();
 		return "";
 	}
 	return getMoveHistoryString(B);

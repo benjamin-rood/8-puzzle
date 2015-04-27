@@ -3,7 +3,6 @@
 //  eight-puzzle
 //
 //  Created by Benjamin Rood on 9/04/15.
-//  Copyright (c) 2015 Dave & Ben. All rights reserved.
 //
 
 #include "board_obj.h"
@@ -25,7 +24,7 @@ Board::Board(void) { //  default constructor will initialise a randomised
   hash = hashBoardState(boardState);
 }
 
-Board::Board(const std::array<uint32_t, boardSize> boardState) {
+Board::Board(const std::array<uint32_t, boardSize> boardState) {	//	initialise a Board with a defined array.
   std::copy(std::begin(boardState), std::end(boardState),
             std::begin(this->boardState));
   for (int i = 0; i < boardSize; ++i) {
@@ -50,6 +49,7 @@ Board::Board(const Board &b) //  straight copy constructor
 Board::Board(const Board &b, enum tileMove move) //  copy
                                                  //  constructor - copies board
                                                  //  then applies move.
+												 //	 Used in state expansion.
     : emptyTile{b.emptyTile},
       pathlength{b.pathlength},
       moveHistory{b.moveHistory} {
@@ -311,30 +311,30 @@ std::string getMoveHistoryString(const std::shared_ptr<Board> B) {
 }
 
 std::string getMoveHistoryString(const Board &B) {
-  std::string mhs;
+  std::string moveHistoryString;
   for (auto &m : B.moveHistory) {
     switch (m) {
     case UP:
-      mhs += "U";
+      moveHistoryString += "U";
       break;
 
     case LEFT:
-      mhs += "L";
+      moveHistoryString += "L";
       break;
 
     case DOWN:
-      mhs += "D";
+      moveHistoryString += "D";
       break;
 
     case RIGHT:
-      mhs += "R";
+      moveHistoryString += "R";
       break;
 
     default:
       break;
     }
   }
-  return mhs;
+  return moveHistoryString;
 }
 
 const std::vector<enum tileMove> &
@@ -390,24 +390,33 @@ Board forceMove(const Board &B, enum tileMove &move) {
   return newBoard;
 }
 
-const std::array<uint32_t, 9> &getState(const std::shared_ptr<Board> B) {
+const std::array<uint32_t, 9>& getState(const std::shared_ptr<Board> B) {
   return getState(*B);
 }
 
-const std::array<uint32_t, 9> &getState(const Board &B) { return B.boardState; }
+const std::array<uint32_t, 9>& getState(const Board &B) { return B.boardState; }
 
 bool testForGoalState(const std::shared_ptr<Board> B) {
   return testForGoalState(*B);
 }
 
 bool testForGoalState(const Board &B) {
-  //  if (std::equal(std::begin(B.boardState), std::end(B.boardState),
-  //                 std::begin(defaultState)))
-  //    return true;
   if (B.hash == 0)
     return true;
   return false;
 }
+
+const std::string getStateString ( const std::shared_ptr<Board> B ) {
+	return getStateString(*B);
+}
+
+const std::string getStateString( const Board& B ) {
+	std::string boardStateString;
+	for (auto& b : B.boardState)
+		boardStateString.push_back(b + '0');
+	return boardStateString;
+}
+
 
 const int &getPathLength(const std::shared_ptr<Board> B) {
   return getPathLength(*B);
@@ -454,7 +463,7 @@ hashBoardState(const std::array<uint32_t, boardSize> boardArray) {
   // "876543210" returns 362879 (highest result)
   // '9' could be replaced with variable,
   // and cleared[] modified to be a smaller or larger array
-  std::array<uint32_t, 9> cleared = {0, 1, 2, 3, 4, 5, 6, 7, 8};
+  std::array<uint32_t, 9> cleared = {{0, 1, 2, 3, 4, 5, 6, 7, 8}};
   int permutation_id = 0;
   int location_count = 0;
   int current_num;
