@@ -1,6 +1,6 @@
 # README #
 
-Woo-Hoo! Here is Dave & Ben's 159.302 
+WIN32 ONLY -- ANIMATION VERSION
 
 # ** ASSIGNMENT ONE ** #
 ##**The Mystery of The Eight Puzzle! ** 
