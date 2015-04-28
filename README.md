@@ -1,6 +1,10 @@
 # README #
 
+<<<<<<< HEAD
 Woo-Hoo! Here is Ben's 159.302 
+=======
+WIN32 ONLY -- ANIMATION VERSION
+>>>>>>> 87967f2e22717b0e87273f2f2323a4e7ad9fea5c
 
 # ** ASSIGNMENT ONE ** #
 ##**The Mystery of The Eight Puzzle! ** 

@@ -13,6 +13,7 @@
 #include <array>
 #include <stack>
 #include <memory>
+#include <algorithm>
 #include <random>
 
 typedef uint32_t hash_t;
