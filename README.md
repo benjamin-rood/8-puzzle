@@ -1,9 +1,6 @@
 # README #
 
-Woo-Hoo! Here is Ben's 159.302 
-
-# ** ASSIGNMENT ONE ** #
-##**The Mystery of The Eight Puzzle! ** 
+##*The Mystery of The Eight Puzzle! * 
 
 ![Jesse-Moynihan-1.jpg](https://bitbucket.org/repo/5y45og/images/1082389076-Jesse-Moynihan-1.jpg)
 
