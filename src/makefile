@@ -11,7 +11,7 @@ algorithm.o	: algorithm.cpp algorithm.h
 	g++ -std=c++11 -c -fpermissive -Wno-write-strings algorithm.cpp
 	
 clean:
-	del *.o
-	del *.exe
+	rm *.o
+	rm *.out
 	
 
