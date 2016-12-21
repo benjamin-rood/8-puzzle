@@ -24,7 +24,8 @@ Board::Board(void) { //  default constructor will initialise a randomised
   hash = hashBoardState(boardState);
 }
 
-Board::Board(const std::array<uint32_t, boardSize> boardState) {	//	initialise a Board with a defined array.
+//	initialise a Board with a defined array.
+Board::Board(const std::array<uint32_t, boardSize> boardState) {
   std::copy(std::begin(boardState), std::end(boardState),
             std::begin(this->boardState));
   for (int i = 0; i < boardSize; ++i) {
@@ -49,7 +50,7 @@ Board::Board(const Board &b) //  straight copy constructor
 Board::Board(const Board &b, enum tileMove move) //  copy
                                                  //  constructor - copies board
                                                  //  then applies move.
-												 //	 Used in state expansion.
+                                                 //	 Used in state expansion.
     : emptyTile{b.emptyTile},
       pathlength{b.pathlength},
       moveHistory{b.moveHistory} {
@@ -81,8 +82,7 @@ Board::Board(const Board &b, enum tileMove move) //  copy
   hash = hashBoardState(boardState);
 }
 
-Board::~Board() {
-}
+Board::~Board() {}
 
 //  iterators for range functions used as [begin, end)
 const uint32_t *Board::begin(void) const { return &boardState[0]; }
@@ -264,10 +264,10 @@ void generateManhattanHeuristic(Board &B) {
     B.heuristic += abs((i - ((int)B[i] + 1)) / 2);
 }
 
-void generateMisplacedTilesHeuristic ( Board& B ) {
-	for (int i = 0; i < boardSize; ++i)
-		if (i != B[i])
-			++B.heuristic;
+void generateMisplacedTilesHeuristic(Board &B) {
+  for (int i = 0; i < boardSize; ++i)
+    if (i != B[i])
+      ++B.heuristic;
 }
 
 void printBoard(const std::shared_ptr<Board> B) { printBoard(*B); }
@@ -390,11 +390,11 @@ Board forceMove(const Board &B, enum tileMove &move) {
   return newBoard;
 }
 
-const std::array<uint32_t, 9>& getState(const std::shared_ptr<Board> B) {
+const std::array<uint32_t, 9> &getState(const std::shared_ptr<Board> B) {
   return getState(*B);
 }
 
-const std::array<uint32_t, 9>& getState(const Board &B) { return B.boardState; }
+const std::array<uint32_t, 9> &getState(const Board &B) { return B.boardState; }
 
 bool testForGoalState(const std::shared_ptr<Board> B) {
   return testForGoalState(*B);
@@ -406,17 +406,16 @@ bool testForGoalState(const Board &B) {
   return false;
 }
 
-const std::string getStateString ( const std::shared_ptr<Board> B ) {
-	return getStateString(*B);
+const std::string getStateString(const std::shared_ptr<Board> B) {
+  return getStateString(*B);
 }
 
-const std::string getStateString( const Board& B ) {
-	std::string boardStateString;
-	for (auto& b : B.boardState)
-		boardStateString.push_back(b + '0');
-	return boardStateString;
+const std::string getStateString(const Board &B) {
+  std::string boardStateString;
+  for (auto &b : B.boardState)
+    boardStateString.push_back(b + '0');
+  return boardStateString;
 }
-
 
 const int &getPathLength(const std::shared_ptr<Board> B) {
   return getPathLength(*B);
@@ -509,13 +508,13 @@ const bool operator<=(const std::shared_ptr<Board> &lhs,
   return operator<=(*lhs, *rhs);
 }
 
-const bool operator>=(const Board &lhs, const Board &rhs){
-	return !operator<=(lhs, rhs);
+const bool operator>=(const Board &lhs, const Board &rhs) {
+  return !operator<=(lhs, rhs);
 }
 
 const bool operator>=(const std::shared_ptr<Board> &lhs,
-					  const std::shared_ptr<Board> &rhs) {
-	return !operator<=(*lhs, *rhs);
+                      const std::shared_ptr<Board> &rhs) {
+  return !operator<=(*lhs, *rhs);
 }
 
 //  END EXTERNAL BOARD FUNCTIONS
