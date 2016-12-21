@@ -10,8 +10,6 @@
 
 ### How do I get set up? ###
 
-* The **Master** is an Xcode project just for my convenience, but one only needs to modify the source files and push those.
-
 * C++ Language Dialect: `GNU++11 [-std=gnu++11]` or `C++11 [-std=c++11]`
 * C++ Standard Library: `libc++ (LLVM C++ standard library with C++11 Support)`
 * Also compatible with `libstdc++`
@@ -25,3 +23,7 @@
 ### Who do I talk to? ###
 
 * Talk to El Presidente Benhamin Rudo who is responsible for administering this git.
+
+### Usage ###
+
+Run `make -C src` from inside the `8-puzzle` directory.
